@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Encontro Perfeito — Chef IA Premium</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ── Base ── */
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gold:#C9A84C;
+  --gold-light:#E8C87A;
+  --gold-dim:rgba(201,168,76,.15);
+  --dark:#0E0D0B;
+  --dark2:#161410;
+  --dark3:#1E1C18;
+  --dark4:#272420;
+  --border:rgba(201,168,76,.18);
+  --border2:rgba(255,255,255,.07);
+  --text:#F0EDE6;
+  --text2:#B8B2A4;
+  --text3:#7A7468;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'Inter',system-ui,sans-serif;
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--sans);
+  background:var(--dark);
+  color:var(--text);
+  min-height:100vh;
+  padding:0;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(201,168,76,.08) 0%, transparent 70%);
+}
+
+/* ── Layout ── */
+.app{max-width:760px;margin:0 auto;padding:48px 20px 80px}
+
+/* ── Header / Brand ── */
+.brand{text-align:center;margin-bottom:48px;position:relative}
+.brand::before{
+  content:'';display:block;width:1px;height:40px;
+  background:linear-gradient(to bottom,transparent,var(--gold));
+  margin:0 auto 24px;
+}
+.brand-kicker{
+  font-family:var(--sans);font-size:10px;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--gold);margin-bottom:16px;
+  font-weight:400;opacity:.9;
+}
+.chef-hat{width:120px;height:120px;object-fit:contain;margin-bottom:2px;filter:invert(1) sepia(1) saturate(2) hue-rotate(5deg) brightness(1.1);mix-blend-mode:screen;}
+.brand-title{
+  font-family:var(--serif);font-size:68px;font-weight:400;
+  color:var(--gold-light);line-height:1.1;letter-spacing:.04em;
+  margin-bottom:4px;
+}
+.brand-title em{font-style:italic;color:var(--gold-light)}
+.brand-tagline{
+  font-family:var(--serif);font-size:16px;font-weight:300;
+  color:var(--gold-light);letter-spacing:.04em;margin-top:8px;
+  font-style:italic;
+}
+.brand-sub{
+  font-size:13px;color:var(--text3);margin-top:14px;
+  font-weight:300;letter-spacing:.03em;line-height:1.7;
+}
+.divider-ornament{
+  display:flex;align-items:center;justify-content:center;gap:12px;
+  margin:20px auto 0;
+}
+.divider-ornament span{height:1px;width:48px;background:linear-gradient(to right,transparent,var(--border) 60%,var(--gold) 100%)}
+.divider-ornament span:last-child{transform:scaleX(-1)}
+.divider-ornament i{
+  width:5px;height:5px;border-radius:50%;
+  background:var(--gold);opacity:.7;
+  display:block;
+}
+
+/* ── Form Card ── */
+.form-card{
+  background:var(--dark2);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:36px;
+  position:relative;
+  overflow:hidden;
+  box-shadow:0 24px 80px rgba(0,0,0,.5), inset 0 1px 0 rgba(201,168,76,.1);
+}
+.form-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  opacity:.5;
+}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.form-full{grid-column:1/-1}
+
+/* ── Fields ── */
+.field-group{display:flex;flex-direction:column}
+.field-label{
+  font-size:10px;font-weight:500;color:var(--gold);
+  text-transform:uppercase;letter-spacing:.14em;
+  margin-bottom:8px;
+}
+.field-label span{color:#e05252}
+select,input,textarea{
+  width:100%;font-size:13px;padding:11px 14px;
+  border:1px solid var(--border2);
+  border-radius:10px;
+  background:var(--dark3);
+  color:var(--text);
+  outline:none;
+  transition:border-color .2s, box-shadow .2s;
+  font-family:var(--sans);
+  font-weight:300;
+  appearance:none;
+  -webkit-appearance:none;
+}
+select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23C9A84C' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;
+  padding-right:38px;cursor:pointer;
+}
+select option{background:var(--dark3);color:var(--text)}
+select:focus,input:focus,textarea:focus{
+  border-color:rgba(201,168,76,.5);
+  box-shadow:0 0 0 3px rgba(201,168,76,.07);
+}
+textarea{resize:vertical;min-height:80px;line-height:1.6}
+
+/* ── Chips ── */
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:6px}
+.chip{
+  font-size:11px;padding:6px 13px;border-radius:20px;
+  border:1px solid var(--border2);cursor:pointer;
+  color:var(--text3);background:var(--dark3);
+  transition:all .2s;user-select:none;font-weight:400;
+  letter-spacing:.02em;
+}
+.chip:hover{border-color:rgba(201,168,76,.3);color:var(--text2)}
+.chip.on{
+  background:var(--gold-dim);
+  border-color:rgba(201,168,76,.5);
+  color:var(--gold-light);
+}
+
+/* ── Submit ── */
+.submit-btn{
+  width:100%;margin-top:28px;padding:15px;
+  font-size:13px;font-weight:400;letter-spacing:.12em;text-transform:uppercase;
+  border:1px solid var(--gold);
+  border-radius:12px;
+  background:linear-gradient(135deg, rgba(201,168,76,.12) 0%, rgba(201,168,76,.06) 100%);
+  color:var(--gold-light);
+  cursor:pointer;transition:all .25s;font-family:var(--sans);
+  position:relative;overflow:hidden;
+}
+.submit-btn::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(201,168,76,.2),transparent);
+  opacity:0;transition:opacity .25s;
+}
+.submit-btn:hover::before{opacity:1}
+.submit-btn:hover{
+  box-shadow:0 0 32px rgba(201,168,76,.2), 0 0 0 1px rgba(201,168,76,.3);
+  transform:translateY(-1px);
+}
+.submit-btn:disabled{opacity:.35;cursor:not-allowed;transform:none}
+
+/* ── Loading ── */
+.loading-state{text-align:center;padding:64px 0}
+.loader-wrap{position:relative;width:56px;height:56px;margin:0 auto 28px}
+.loader{
+  width:56px;height:56px;
+  border:1px solid rgba(201,168,76,.15);
+  border-top-color:var(--gold);
+  border-radius:50%;
+  animation:spin 1.2s linear infinite;
+}
+.loader-dot{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:6px;height:6px;border-radius:50%;background:var(--gold);
+  animation:pulse 1.2s ease-in-out infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{0%,100%{opacity:.3;transform:translate(-50%,-50%) scale(.8)} 50%{opacity:1;transform:translate(-50%,-50%) scale(1.2)}}
+.loading-text{
+  font-family:var(--serif);font-size:22px;font-weight:300;
+  color:var(--text);letter-spacing:.04em;margin-bottom:8px;
+}
+.loading-sub{font-size:12px;color:var(--text3);letter-spacing:.06em;font-weight:300}
+
+/* ── Result Header ── */
+.result-header{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:24px;
+}
+.result-title{
+  font-family:var(--serif);font-size:18px;font-weight:400;
+  color:var(--text2);letter-spacing:.04em;
+}
+.result-title strong{color:var(--gold-light);font-weight:400}
+.reset-btn{
+  font-size:10px;color:var(--text3);cursor:pointer;
+  padding:6px 12px;border-radius:8px;
+  border:1px solid var(--border2);background:transparent;
+  font-family:var(--sans);letter-spacing:.08em;text-transform:uppercase;
+  transition:all .2s;
+}
+.reset-btn:hover{border-color:var(--border);color:var(--text2)}
+
+/* ── Recipe Cards ── */
+.recipe-card{
+  background:var(--dark2);
+  border:1px solid var(--border);
+  border-radius:20px;padding:32px;
+  margin-bottom:20px;
+  position:relative;overflow:hidden;
+  box-shadow:0 16px 48px rgba(0,0,0,.4);
+  animation:fadeUp .5s ease both;
+}
+.recipe-card:nth-child(2){animation-delay:.1s}
+.recipe-card:nth-child(3){animation-delay:.2s}
+.recipe-card:nth-child(4){animation-delay:.3s}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)}}
+.recipe-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent 0%,var(--gold) 50%,transparent 100%);
+  opacity:.4;
+}
+.recipe-img{
+  width:100%;height:260px;object-fit:cover;
+  border-radius:12px;margin-bottom:20px;display:block;
+  border:1px solid var(--border);
+}
+.recipe-num{
+  font-size:9px;font-weight:500;color:var(--gold);
+  letter-spacing:.18em;text-transform:uppercase;margin-bottom:10px;
+  opacity:.8;
+}
+.recipe-name{
+  font-family:var(--serif);font-size:28px;font-weight:400;
+  color:var(--text);margin-bottom:12px;line-height:1.2;
+  letter-spacing:.02em;
+}
+.recipe-desc{
+  font-size:13px;color:var(--text2);line-height:1.75;
+  margin-bottom:20px;font-weight:300;
+}
+
+/* ── Tags ── */
+.recipe-tags{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:20px}
+.tag{
+  font-size:10px;padding:4px 10px;border-radius:20px;
+  font-weight:400;letter-spacing:.06em;
+}
+.tag-cat{background:rgba(16,110,84,.25);color:#5ECBA1;border:1px solid rgba(94,203,161,.2)}
+.tag-dif{background:rgba(180,100,30,.2);color:#E8A96C;border:1px solid rgba(232,169,108,.2)}
+.tag-time{background:rgba(100,80,200,.2);color:#A99EE8;border:1px solid rgba(169,158,232,.2)}
+.tag-mood{background:rgba(160,50,50,.2);color:#E8908A;border:1px solid rgba(232,144,138,.2)}
+
+/* ── Sections grid ── */
+.recipe-sections{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
+.rs-box{
+  background:var(--dark3);
+  border:1px solid var(--border2);
+  border-radius:12px;padding:16px;
+}
+.rs-label{
+  font-size:9px;font-weight:500;color:var(--gold);
+  text-transform:uppercase;letter-spacing:.16em;margin-bottom:10px;
+  opacity:.8;
+}
+.rs-list{font-size:12px;color:var(--text2);line-height:1.9;font-weight:300}
+.rs-list li{list-style:none;padding-left:14px;position:relative}
+.rs-list li::before{content:'—';position:absolute;left:0;color:var(--gold);opacity:.4;font-size:10px;top:1px}
+
+/* ── Wine ── */
+.wine-row{margin-bottom:20px}
+.wine-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.wine-chip{
+  font-size:11px;padding:5px 12px;border-radius:20px;
+  background:rgba(201,168,76,.08);
+  border:1px solid rgba(201,168,76,.2);
+  color:var(--gold-light);font-weight:300;
+}
+
+/* ── Mesa ── */
+.table-row{margin-bottom:6px}
+.table-items{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px}
+.ti{
+  background:var(--dark3);border:1px solid var(--border2);
+  border-radius:12px;padding:12px;
+  transition:border-color .2s;
+}
+.ti:hover{border-color:rgba(201,168,76,.25)}
+.ti-name{font-size:12px;font-weight:400;color:var(--text)}
+.ti-desc{font-size:11px;color:var(--text3);margin-top:4px;line-height:1.5;font-weight:300}
+
+/* ── Match note ── */
+.match-note{
+  background:linear-gradient(135deg,rgba(201,168,76,.08),rgba(201,168,76,.04));
+  border:1px solid rgba(201,168,76,.2);
+  border-radius:12px;padding:14px 16px;
+  font-size:13px;color:var(--gold-light);line-height:1.65;
+  font-weight:300;font-style:italic;
+  font-family:var(--serif);font-size:15px;
+}
+
+/* ── Chef tip ── */
+.dica-box{
+  background:var(--dark3);
+  border:1px solid var(--border2);
+  border-left:2px solid var(--gold);
+  border-radius:0 10px 10px 0;
+  padding:14px 16px;margin-top:16px;
+}
+.dica-label{
+  font-size:9px;font-weight:500;color:var(--gold);
+  text-transform:uppercase;letter-spacing:.16em;margin-bottom:6px;opacity:.8;
+}
+.dica-text{font-size:12px;color:var(--text2);line-height:1.7;font-weight:300}
+
+/* ── Sommelier note ── */
+.sommelier-box{
+  background:var(--dark2);
+  border:1px solid var(--border);
+  border-radius:16px;padding:22px 26px;
+  margin-bottom:20px;
+  display:flex;gap:14px;align-items:flex-start;
+}
+.sommelier-icon{
+  font-family:var(--serif);font-size:28px;line-height:1;
+  color:var(--gold);flex-shrink:0;margin-top:2px;
+  opacity:.7;
+}
+.sommelier-label{
+  font-size:9px;font-weight:500;color:var(--gold);
+  text-transform:uppercase;letter-spacing:.16em;margin-bottom:6px;opacity:.8;
+}
+.sommelier-text{font-size:13px;color:var(--text2);line-height:1.7;font-weight:300;font-style:italic;font-family:var(--serif);font-size:15px}
+
+/* ── New search btn ── */
+.new-search-btn{
+  width:100%;padding:14px;font-size:12px;font-weight:400;
+  letter-spacing:.1em;text-transform:uppercase;
+  border:1px solid var(--border2);border-radius:12px;
+  background:transparent;color:var(--text3);
+  cursor:pointer;transition:all .2s;font-family:var(--sans);
+}
+.new-search-btn:hover{border-color:var(--border);color:var(--text2);background:var(--dark2)}
+
+/* ── Error ── */
+.error-box{
+  background:rgba(180,40,40,.12);
+  border:1px solid rgba(200,80,80,.25);
+  border-radius:12px;padding:16px;
+  font-size:13px;color:#E89090;margin-top:16px;line-height:1.65;
+}
+
+/* ── Responsive ── */
+@media(max-width:580px){
+  .brand-title{font-size:38px}
+  .form-card{padding:24px 20px}
+  .form-grid{grid-template-columns:1fr}
+  .form-full{grid-column:1}
+  .recipe-card{padding:24px 20px}
+  .recipe-name{font-size:22px}
+  .recipe-sections{grid-template-columns:1fr}
+  .table-items{grid-template-columns:1fr 1fr}
+  .sommelier-box{flex-direction:column;gap:8px}
+}
+
+/* ── Save button ── */
+.save-btn{
+  display:inline-flex;align-items:center;gap:7px;
+  font-size:11px;font-weight:400;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--text3);border:1px solid var(--border2);
+  background:transparent;border-radius:8px;padding:7px 14px;
+  cursor:pointer;transition:all .2s;font-family:var(--sans);
+  margin-top:16px;
+}
+.save-btn:hover{border-color:rgba(201,168,76,.35);color:var(--gold-light)}
+.save-btn.saved{
+  color:var(--gold);border-color:rgba(201,168,76,.4);
+  background:rgba(201,168,76,.07);
+}
+.save-btn svg{width:13px;height:13px;flex-shrink:0;transition:fill .2s}
+.save-btn.saved svg{fill:var(--gold)}
+
+/* ── Nav tabs ── */
+.nav-tabs{
+  display:flex;gap:0;margin-bottom:36px;
+  background:var(--dark2);border:1px solid var(--border);
+  border-radius:12px;padding:4px;
+}
+.nav-tab{
+  flex:1;padding:9px;font-size:11px;font-weight:400;
+  letter-spacing:.1em;text-transform:uppercase;
+  border:none;background:transparent;color:var(--text3);
+  cursor:pointer;border-radius:9px;transition:all .2s;
+  font-family:var(--sans);display:flex;align-items:center;
+  justify-content:center;gap:7px;
+}
+.nav-tab.active{background:var(--dark4);color:var(--gold-light)}
+.nav-tab .badge{
+  font-size:9px;background:var(--gold-dim);color:var(--gold);
+  border-radius:20px;padding:1px 7px;border:1px solid rgba(201,168,76,.25);
+  font-weight:500;
+}
+
+/* ── Saved empty state ── */
+.empty-saved{
+  text-align:center;padding:60px 20px;
+  border:1px dashed var(--border2);border-radius:16px;
+}
+.empty-saved-icon{font-size:32px;opacity:.3;margin-bottom:14px}
+.empty-saved-title{
+  font-family:var(--serif);font-size:20px;font-weight:300;
+  color:var(--text2);margin-bottom:8px;
+}
+.empty-saved-sub{font-size:13px;color:var(--text3);font-weight:300}
+
+/* ── Remove button ── */
+.remove-btn{
+  font-size:10px;color:var(--text3);border:none;
+  background:transparent;cursor:pointer;font-family:var(--sans);
+  letter-spacing:.08em;text-transform:uppercase;
+  padding:4px 0;transition:color .2s;
+}
+.remove-btn:hover{color:#E89090}
+
+/* ── User header ── */
+.top-bar{
+  display:flex;justify-content:flex-end;align-items:center;
+  gap:10px;margin-bottom:20px;
+}
+.user-name{font-size:12px;color:var(--text2);font-weight:300}
+.plan-badge{
+  font-size:9px;padding:3px 9px;border-radius:20px;
+  font-weight:500;letter-spacing:.07em;text-transform:uppercase;
+}
+.plan-badge.free{background:var(--dark3);border:1px solid var(--border2);color:var(--text3)}
+.plan-badge.premium{background:var(--gold-dim);border:1px solid rgba(201,168,76,.3);color:var(--gold)}
+.logout-btn{
+  font-size:10px;color:var(--text3);background:transparent;border:none;
+  cursor:pointer;font-family:var(--sans);letter-spacing:.08em;
+  text-transform:uppercase;transition:color .2s;padding:0;
+}
+.logout-btn:hover{color:#E89090}
+.btn-login-top{
+  font-size:10px;color:var(--gold);background:transparent;
+  border:1px solid rgba(201,168,76,.3);border-radius:8px;
+  padding:6px 12px;cursor:pointer;font-family:var(--sans);
+  letter-spacing:.1em;text-transform:uppercase;transition:all .2s;
+  text-decoration:none;display:inline-block;
+}
+.btn-login-top:hover{background:var(--gold-dim)}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top-bar" id="top-bar"></div>
+  <div class="brand">
+    <img class="chef-hat" src="fotos/chapeu%20do%20chefe.jpeg" alt="Chef">
+    <div class="brand-title">Gourmet Essence</div>
+    <div class="brand-tagline">Descubra o prazer da alta gastronomia na sua casa.</div>
+    <div class="divider-ornament">
+      <span></span><i></i><span></span>
+    </div>
+  </div>
+
+  <div class="nav-tabs">
+    <button class="nav-tab active" id="tab-busca" onclick="showTab('busca')">
+      Buscar Receitas
+    </button>
+    <button class="nav-tab" id="tab-salvas" onclick="showTab('salvas')">
+      Minhas Receitas <span class="badge" id="badge-salvas">0</span>
+    </button>
+  </div>
+
+  <div id="view-busca">
+  <div id="form-area">
+    <div class="form-card">
+      <div class="form-grid">
+        <div>
+          <div class="field-label">Tipo de encontro <span>*</span></div>
+          <select id="tipo">
+            <option value="">Selecione...</option>
+            <option>Jantar romântico</option>
+            <option>Almoço de negócios</option>
+            <option>Reunião familiar especial</option>
+            <option>Aniversário íntimo</option>
+            <option>Celebração entre amigos</option>
+            <option>Pedido de casamento</option>
+            <option>Degustação temática</option>
+          </select>
+        </div>
+        <div>
+          <div class="field-label">Número de pessoas</div>
+          <select id="pessoas">
+            <option>2 pessoas</option>
+            <option>3 a 4 pessoas</option>
+            <option>5 a 8 pessoas</option>
+            <option>Mais de 8</option>
+          </select>
+        </div>
+        <div>
+          <div class="field-label">Proteína preferida</div>
+          <div class="chips" id="chips-proteina">
+            <span class="chip on" data-val="Peixe">Peixe</span>
+            <span class="chip on" data-val="Frutos do mar">Frutos do mar</span>
+            <span class="chip on" data-val="Carne vermelha">Carne vermelha</span>
+            <span class="chip" data-val="Aves">Aves</span>
+            <span class="chip" data-val="Vegetariano">Vegetariano</span>
+          </div>
+        </div>
+        <div>
+          <div class="field-label">Nível de dificuldade</div>
+          <select id="dificuldade">
+            <option>Qualquer nível</option>
+            <option>Fácil (receitas elegantes mas acessíveis)</option>
+            <option>Média (técnicas intermediárias)</option>
+            <option>Alta (experiência de chef)</option>
+          </select>
+        </div>
+        <div>
+          <div class="field-label">Ambiente e clima</div>
+          <select id="ambiente">
+            <option>Íntimo e sofisticado</option>
+            <option>Leve e descontraído</option>
+            <option>Imponente e formal</option>
+            <option>Sensual e surpresa</option>
+            <option>Alegre e festivo</option>
+          </select>
+        </div>
+        <div>
+          <div class="field-label">Restrições alimentares <span style="font-weight:300;font-size:11px;opacity:.6">(selecione todas que se aplicam)</span></div>
+          <div class="chips" id="chips-restricoes">
+            <span class="chip" data-val="Sem glúten">Sem glúten</span>
+            <span class="chip" data-val="Sem lactose">Sem lactose</span>
+            <span class="chip" data-val="Sem frutos do mar">Sem frutos do mar</span>
+            <span class="chip" data-val="Low carb / cetogênico">Low carb / cetogênico</span>
+            <span class="chip" data-val="Halal">Halal</span>
+          </div>
+        </div>
+        <div class="form-full">
+          <div class="field-label">Conte mais sobre o encontro (opcional)</div>
+          <textarea id="contexto" placeholder="Ex: Ela ama frutos do mar e vinhos brancos... Queremos algo surpreendente com apresentação impecável na mesa..."></textarea>
+        </div>
+        <div class="form-full">
+          <div class="field-label">Harmonização de vinhos</div>
+          <div class="chips" id="chips-vinho">
+            <span class="chip on" data-val="Sugestão de vinho incluída">Quero sugestões de vinho</span>
+            <span class="chip" data-val="Opções sem álcool também">Incluir opções sem álcool</span>
+            <span class="chip" data-val="Champagne e espumantes">Champagne / espumantes</span>
+            <span class="chip" data-val="Vinhos naturais">Vinhos naturais</span>
+          </div>
+        </div>
+      </div>
+      <button class="submit-btn" id="submit-btn" onclick="buscarReceitas()">Encontrar minhas receitas premium</button>
+    </div>
+  </div>
+
+  <div id="loading-area" style="display:none">
+    <div class="loading-state">
+      <div class="loader-wrap">
+        <div class="loader"></div>
+        <div class="loader-dot"></div>
+      </div>
+      <div class="loading-text">Preparando seu cardápio...</div>
+      <div class="loading-sub" id="loading-sub">Analisando o perfil do seu encontro</div>
+    </div>
+  </div>
+
+  <div id="result-area" style="display:none"></div>
+  <div id="error-area"></div>
+  </div><!-- /view-busca -->
+
+  <div id="view-salvas" style="display:none">
+    <div id="saved-list"></div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// BANCO DE DADOS LOCAL — receitas_premium.json embutido
+// ============================================================
+const DB = {"metadata":{"titulo":"Receitas Premium — Alta Gastronomia","versao":"1.0","total":10,"categorias":["Peixe","Frutos do Mar","Carne"],"criado_em":"2026-03-21"},"receitas":[{"id":1,"nome":"Robalo Selvagem com Beurre Blanc de Champagne","categoria":"Peixe","descricao":"Filé de robalo selvagem selado em manteiga de noisette, acompanhado de molho beurre blanc feito com Champagne Brut e échalotes. Finalizado com caviar Oscietra e erva-doce caramelizada.","tempo_preparo":"55 min","dificuldade":"Alta","porcoes":"2 pessoas","ingredientes":[{"item":"Robalo selvagem","quantidade":"400g"},{"item":"Champagne Brut","quantidade":"150ml"},{"item":"Manteiga francesa","quantidade":"180g"},{"item":"Échalotes","quantidade":"60g"},{"item":"Caviar Oscietra","quantidade":"20g"},{"item":"Erva-doce baby","quantidade":"a gosto"},{"item":"Creme de leite fresco","quantidade":"50ml"},{"item":"Limão siciliano","quantidade":"1 unidade"}],"tecnica":["Selar o peixe na frigideira de ferro fundido","Reduzir Champagne com échalotes até 1/3","Montar o beurre blanc em banho-maria","Finalizar com caviar na hora de servir"],"harmonizacao":{"vinhos":["Champagne Blanc de Blancs","Chablis Premier Cru","Puligny-Montrachet"],"temperatura_servico":"8-10°C"},"mise_en_place":[{"item":"Louça de porcelana branca","sugestao":"Rosenthal ou Wedgwood"},{"item":"Taça flûte gravada","sugestao":"Riedel Vinum"},{"item":"Centro de orquídeas brancas","sugestao":"Baixo para não cobrir o convidado"}],"dica_chef":"Usar manteiga gelada em cubos pequenos para montar o beurre blanc garante emulsão perfeita e textura aveludada.","foto":"fotos/receita de robalo.png"},{"id":2,"nome":"Lagosta Termidor com Bisque Dourado","categoria":"Frutos do Mar","descricao":"Lagosta inteira flambada com Cognac, gratinada com molho Thermidor de mostarda de Dijon, estragão fresco e Gruyère AOP envelhecido. Bisque dourado feito com as cascas e Armagnac.","tempo_preparo":"90 min","dificuldade":"Alta","porcoes":"2 pessoas","ingredientes":[{"item":"Lagosta viva","quantidade":"800g"},{"item":"Cognac VSOP","quantidade":"80ml"},{"item":"Mostarda de Dijon","quantidade":"2 colheres de sopa"},{"item":"Gruyère AOP","quantidade":"80g"},{"item":"Estragão fresco","quantidade":"a gosto"},{"item":"Manteiga clarificada","quantidade":"60g"},{"item":"Creme duplo","quantidade":"100ml"},{"item":"Fundo de crustáceo","quantidade":"200ml"}],"tecnica":["Colocar lagosta no freezer por 30 min antes de cortar ao meio","Flambar com Cognac em alta chama","Preparar o molho Thermidor com redução de vinho branco","Gratinar a 220°C por 8 minutos"],"harmonizacao":{"vinhos":["Meursault Charmes","Corton-Charlemagne","Montrachet Grand Cru"],"temperatura_servico":"10-12°C"},"mise_en_place":[{"item":"Prato de porcelana com ouro","sugestao":"Bernardaud Constance"},{"item":"Tenaz de lagosta dourada","sugestao":"Apresentar sobre prato de gelo"},{"item":"Velas âmbar baixas","sugestao":"Cria reflexo quente na porcelana"}],"dica_chef":"Tostar levemente as cascas da lagosta antes de fazer o bisque libera melanoidinas que aprofundam o sabor em 3x."},{"id":3,"nome":"Wagyu A5 com Jus de Trufas Negras","categoria":"Carne","descricao":"Picanha Wagyu japonês A5 grelhada no carvão de binchotan, com jus concentrado de trufas negras Périgord, purê de batata ratte com manteiga AOP e lâminas de trufa ao vivo.","tempo_preparo":"40 min","dificuldade":"Média","porcoes":"2 pessoas","ingredientes":[{"item":"Wagyu A5","quantidade":"300g"},{"item":"Trufa negra Périgord","quantidade":"30g"},{"item":"Batata ratte","quantidade":"300g"},{"item":"Manteiga AOP Échiré","quantidade":"100g"},{"item":"Caldo de boi artesanal","quantidade":"500ml"},{"item":"Flor de sal de Guérande","quantidade":"a gosto"},{"item":"Tomilho fresco","quantidade":"3 ramos"},{"item":"Alho confitado","quantidade":"4 dentes"}],"tecnica":["Temperar apenas com flor de sal 1h antes","Grelhar no binchotan 2 min cada lado — ponto mal passado","Reduzir jus com trufa ralada na hora","Montar purê com manteiga gelada em pedaços"],"harmonizacao":{"vinhos":["Pomerol (Pétrus)","Barolo Riserva","Hermitage Rouge"],"temperatura_servico":"16-18°C"},"mise_en_place":[{"item":"Ardósia negra polida","sugestao":"Contrasta com a trufa e valoriza o wagyu"},{"item":"Talheres prata maciça","sugestao":"Christofle Malmaison"},{"item":"Campânula de cristal","sugestao":"Para apresentar o aroma da trufa"}],"dica_chef":"Nunca usar sal grosso no wagyu A5 — o marmoreio já tem gordura suficiente para conduzir o sabor. Flor de sal só na finalização."},{"id":4,"nome":"Atum Bluefin Tataki com Dashi de Kombu","categoria":"Peixe","descricao":"Ventrecha de atum bluefin levemente selada, molho ponzu artesanal com yuzu fresco, caldo dashi puríssimo de kombu e katsuobushi, acompanhado de daikon em conserva e ovas de salmão.","tempo_preparo":"35 min","dificuldade":"Média","porcoes":"2 pessoas","ingredientes":[{"item":"Ventrecha de atum bluefin","quantidade":"300g"},{"item":"Kombu seco","quantidade":"20g"},{"item":"Katsuobushi","quantidade":"15g"},{"item":"Yuzu fresco","quantidade":"2 unidades"},{"item":"Shoyu artesanal","quantidade":"60ml"},{"item":"Mirin honkaku","quantidade":"30ml"},{"item":"Daikon","quantidade":"200g"},{"item":"Ovas de salmão","quantidade":"30g"}],"tecnica":["Preparar dashi frio 8h antes — kombu em água gelada","Selar o atum 15 seg cada lado em frigideira incandescente","Fatiar com faca Yanagiba em 45°","Montar o ponzu com yuzu fresco na hora"],"harmonizacao":{"vinhos":["Sake Junmai Daiginjo","Sancerre Blanc","Vermentino di Gallura DOCG"],"temperatura_servico":"9-11°C"},"mise_en_place":[{"item":"Prato de cerâmica japonesa","sugestao":"Barro esmaltado preto fosco"},{"item":"Hashi de laca negra","sugestao":"Apresentar sobre suporte de bambu"},{"item":"Ikebana minimalista","sugestao":"Uma flor de lótus no centro da mesa"}],"dica_chef":"O dashi frio (mizudashi) extrai umami puro sem amargor — nunca ferva o kombu, isso destrói o glutamato."},{"id":5,"nome":"Vieiras Saint-Jacques com Duxelles e Espuma de Ceps","categoria":"Frutos do Mar","descricao":"Vieiras frescas da Bretanha seladas em manteiga noisette, sobre cama de duxelles de cogumelos Paris e porcini, espuma aerada de ceps secos e chips de alcachofra de Jerusalém.","tempo_preparo":"50 min","dificuldade":"Alta","porcoes":"2 pessoas","ingredientes":[{"item":"Vieiras Saint-Jacques frescas","quantidade":"8 unidades"},{"item":"Cogumelos porcini","quantidade":"100g"},{"item":"Ceps secos","quantidade":"30g"},{"item":"Manteiga noisette","quantidade":"80g"},{"item":"Alcachofra de Jerusalém","quantidade":"200g"},{"item":"Creme de leite 35%","quantidade":"200ml"},{"item":"Lecitina de soja","quantidade":"2g"},{"item":"Azeite extravirgem de solteiro","quantidade":"30ml"}],"tecnica":["Secar as vieiras por 2h na geladeira descobertas","Preparar duxelles com cogumelos em brunoise fino","Sifão para espuma: infusão de ceps + lecitina a 65°C","Selar vieiras 90 seg cada lado sem mover"],"harmonizacao":{"vinhos":["Puligny-Montrachet 1er Cru","Burgundy Chardonnay envelhecido","Rioja Blanco Reserva"],"temperatura_servico":"10-12°C"},"mise_en_place":[{"item":"Concha natural de vieira","sugestao":"Servir dentro da própria concha polida"},{"item":"Guardanapo de linho belga","sugestao":"Dobra envelope clássica"},{"item":"Mini lanterna LED sob a concha","sugestao":"Efeito translúcido ao servir"}],"dica_chef":"Superfície seca é o segredo do selamento perfeito. A umidade impede a reação de Maillard e a vieira cozinha ao vapor."},{"id":6,"nome":"Pato de Bresse com Molho Grand Veneur","categoria":"Carne","descricao":"Magret de pato AOP de Bresse confitado lentamente e finalizado crocante, com molho Grand Veneur de frutas vermelhas e Pinot Noir, purê de castanha e pera pochê ao vinho do Porto.","tempo_preparo":"120 min","dificuldade":"Alta","porcoes":"2 pessoas","ingredientes":[{"item":"Magret de pato AOP","quantidade":"2 unidades"},{"item":"Pinot Noir da Borgonha","quantidade":"200ml"},{"item":"Frutas vermelhas frescas","quantidade":"150g"},{"item":"Castanha portuguesa","quantidade":"300g"},{"item":"Pera Williams","quantidade":"2 unidades"},{"item":"Porto Ruby Ramos Pinto","quantidade":"150ml"},{"item":"Fundo de caça concentrado","quantidade":"300ml"},{"item":"Genebro e cravo","quantidade":"a gosto"}],"tecnica":["Confitar o pato a 68°C por 3h","Cruzar cortes na pele e fritar começando com a frigideira fria","Reduzir o molho com os ossos tostados 4h antes","Poclear a pera 20 min em Porto e especiarias"],"harmonizacao":{"vinhos":["Gevrey-Chambertin","Côte de Nuits Villages","Pinot Noir da Borgonha"],"temperatura_servico":"16-18°C"},"mise_en_place":[{"item":"Prato fundo de porcelana escura","sugestao":"Realça o molho rubi e o pato dourado"},{"item":"Guéridon de prata","sugestao":"Tampa apresentada na mesa pelo sommelier"},{"item":"Rosas vermelhas bordeaux","sugestao":"Arranjo baixo lateral"}],"dica_chef":"Começar a frigideira fria com a pele para baixo derrete a gordura subcutânea lentamente — resulta em pele crocante sem queimar."},{"id":7,"nome":"Ostra Tsarskaya Gratinada com Champagne Sabayon","categoria":"Frutos do Mar","descricao":"Ostras Tsarskaya nº3 da Normandia levemente gratinadas com sabayon de Champagne Brut e ciboulette, sobre cama de sal grosso e algas. Servidas com granita de pepino e dill.","tempo_preparo":"30 min","dificuldade":"Média","porcoes":"2 pessoas","ingredientes":[{"item":"Ostras Tsarskaya nº3","quantidade":"12 unidades"},{"item":"Champagne Brut","quantidade":"80ml"},{"item":"Gemas de ovos caipira","quantidade":"3 unidades"},{"item":"Ciboulette fina","quantidade":"a gosto"},{"item":"Pepino japonês","quantidade":"1 unidade"},{"item":"Dill fresco","quantidade":"a gosto"},{"item":"Sal grosso Maldon","quantidade":"200g"},{"item":"Algas nori","quantidade":"para decoração"}],"tecnica":["Abrir as ostras e soltar do músculo, reservar a água","Bater sabayon sobre banho-maria até triplicar de volume","Gratinar levemente com maçarico de chef","Granita: bater suco de pepino com dill e congelar"],"harmonizacao":{"vinhos":["Champagne Blanc de Blancs","Muscadet Sèvre et Maine sur Lie","Albariño Rias Baixas"],"temperatura_servico":"6-8°C"},"mise_en_place":[{"item":"Prato fundo com gelo picado","sugestao":"Com algas decorativas frescas"},{"item":"Faca de ostra com cabo em madrepérola","sugestao":"Deixar à vista — é parte do ritual"},{"item":"Flûtes de cristal soprado","sugestao":"Baccarat Château Baccarat"}],"dica_chef":"O sabayon deve ser montado e servido imediatamente — ele colapsa em 8 minutos. Prepare tudo antes de bater."},{"id":8,"nome":"Linguado Meunière com Caviar e Limão Confitado","categoria":"Peixe","descricao":"Linguado inteiro de 600g preparado à meunière clássica em manteiga dourada, finalizado com limão siciliano confitado em azeite, alcaparras de Pantelleria e caviar Beluga ao final.","tempo_preparo":"45 min","dificuldade":"Alta","porcoes":"2 pessoas","ingredientes":[{"item":"Linguado de linha inteiro","quantidade":"600g"},{"item":"Manteiga francesa extra","quantidade":"150g"},{"item":"Limão siciliano","quantidade":"2 unidades"},{"item":"Alcaparras de Pantelleria","quantidade":"20g"},{"item":"Caviar Beluga","quantidade":"15g"},{"item":"Farinha de trigo T45","quantidade":"50g"},{"item":"Salsinha de folha plana","quantidade":"a gosto"},{"item":"Azeite de leccino","quantidade":"30ml"}],"tecnica":["Retirar a pele preta do linguado","Passar na farinha apenas na hora de cozinhar","Manteiga deve espumar mas não queimar — noisette","Desossar à mesa — é parte do serviço"],"harmonizacao":{"vinhos":["Meursault Les Genevrières","Pessac-Léognan Blanc","Grüner Veltliner Smaragd"],"temperatura_servico":"10-12°C"},"mise_en_place":[{"item":"Mesa guéridon para filetar na hora","sugestao":"Apresentação cerimonial clássica"},{"item":"Prato oval de porcelana branca","sugestao":"Villeroy & Boch New Wave"},{"item":"Pinça de peixe de prata","sugestao":"Parte do mise en place visível ao cliente"}],"dica_chef":"Farinha T45 (mais fina) cria crosta mais delicada que a T55. Nunca enfarinhe com antecedência — a umidade arruína o crocante."},{"id":9,"nome":"Costela Short Rib 72h com Purê de Manteiga Negra","categoria":"Carne","descricao":"Short rib sous-vide 72 horas a 72°C, finalizado em brasa de carvalho, purê montado com manteiga negra e caldo de osso concentrado, acompanhado de cenoura roxa glaceada ao mel de lavanda.","tempo_preparo":"72h + 30 min finalização","dificuldade":"Alta","porcoes":"2 pessoas","ingredientes":[{"item":"Short rib","quantidade":"800g"},{"item":"Manteiga noisette escura","quantidade":"120g"},{"item":"Caldo de osso assado","quantidade":"1 litro"},{"item":"Cenoura roxa","quantidade":"4 unidades"},{"item":"Mel de lavanda","quantidade":"30ml"},{"item":"Tomilho e alecrim fresco","quantidade":"a gosto"},{"item":"Batata asterix","quantidade":"400g"},{"item":"Flor de sal defumado","quantidade":"a gosto"}],"tecnica":["Selar a costela antes do sous-vide para reação de Maillard","Banho a 72°C por 72h — câmbio de água a cada 24h opcional","Finalizar 2 min por lado na brasa alta de carvalho","Purê: processar com manteiga gelada até textura sedosa"],"harmonizacao":{"vinhos":["Châteauneuf-du-Pape","Napa Valley Cabernet Sauvignon","Malbec de Luján de Cuyo Alta"],"temperatura_servico":"17-19°C"},"mise_en_place":[{"item":"Ardósia aquecida a 60°C","sugestao":"Mantém a carne quente ao longo do serviço"},{"item":"Faca de trinchar à mesa","sugestao":"Cortar diante do comensal"},{"item":"Ramos de alecrim decorativos","sugestao":"Na ardósia, ao lado da carne"}],"dica_chef":"Selar antes E depois do sous-vide é possível — o segundo selamento na brasa reativa os aromas de Maillard que a água dissipou."},{"id":10,"nome":"Camarão VG Flamejado com Bisque de Laranja","categoria":"Frutos do Mar","descricao":"Camarão VG (Very Giant) inteiro flambado com Calvados, bisque refinado com zest de laranja sanguínea e erva-doce, servido com arroz basmati em caldo de açafrão e chips de gengibre.","tempo_preparo":"60 min","dificuldade":"Média","porcoes":"2 pessoas","ingredientes":[{"item":"Camarão VG inteiro","quantidade":"600g"},{"item":"Calvados","quantidade":"80ml"},{"item":"Laranja sanguínea","quantidade":"3 unidades"},{"item":"Erva-doce bulbo","quantidade":"1 unidade"},{"item":"Açafrão La Mancha","quantidade":"0,5g"},{"item":"Arroz basmati extra long","quantidade":"200g"},{"item":"Gengibre fresco","quantidade":"40g"},{"item":"Manteiga noisette","quantidade":"60g"}],"tecnica":["Flambar o camarão diante do comensal — espetáculo incluído","Bisque: tostar as cascas a seco antes de umedecer","Caldo de açafrão: infundir 15 min a 70°C sem ferver","Chips de gengibre: fatiar em mandoline e desidratar 2h a 80°C"],"harmonizacao":{"vinhos":["Condrieu Viognier","Alsace Riesling Grand Cru","Viré-Clessé Vieilles Vignes"],"temperatura_servico":"10-12°C"},"mise_en_place":[{"item":"Rechaud à álcool na mesa","sugestao":"Para o flambé ao vivo diante dos convidados"},{"item":"Prato raso branco com aro dourado","sugestao":"Bernardaud Eden Or"},{"item":"Guardanapo broderie anglaise","sugestao":"Dobra clássica em tulipa"}],"dica_chef":"Calvados (maçã) harmoniza melhor com crustáceos do que Cognac (uva) — a fruta dá leveza sem mascarar o iodo do camarão."}]};
+
+// ============================================================
+// FAVORITOS — localStorage
+// ============================================================
+const STORAGE_KEY = 'chef_premium_salvas';
+
+function getSalvas(){
+  try{ return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+  catch(e){ return []; }
+}
+
+function setSalvas(lista){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(lista));
+  atualizarBadge();
+}
+
+function atualizarBadge(){
+  const n = getSalvas().length;
+  document.getElementById('badge-salvas').textContent = n;
+}
+
+function salvarReceita(receita){
+  const lista = getSalvas();
+  const jaExiste = lista.some(r => r.nome === receita.nome);
+  if(jaExiste) return;
+  receita._savedAt = new Date().toLocaleDateString('pt-BR');
+  lista.unshift(receita);
+  setSalvas(lista);
+}
+
+function removerReceita(nome){
+  const lista = getSalvas().filter(r => r.nome !== nome);
+  setSalvas(lista);
+  renderSalvas();
+}
+
+function isSalva(nome){
+  return getSalvas().some(r => r.nome === nome);
+}
+
+function toggleSalvar(nome, btnEl){
+  if(isSalva(nome)){
+    removerReceita(nome);
+    btnEl.classList.remove('saved');
+    btnEl.innerHTML = iconeSalvar(false) + ' Salvar receita';
+  } else {
+    // busca nos resultados atuais renderizados
+    const card = btnEl.closest('.recipe-card');
+    const dadosStr = card.dataset.receita;
+    if(dadosStr) salvarReceita(JSON.parse(dadosStr));
+    btnEl.classList.add('saved');
+    btnEl.innerHTML = iconeSalvar(true) + ' Salva';
+  }
+}
+
+function iconeSalvar(salva){
+  return `<svg viewBox="0 0 24 24" fill="${salva?'currentColor':'none'}" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z"/></svg>`;
+}
+
+// ============================================================
+// TABS
+// ============================================================
+function showTab(tab){
+  document.getElementById('view-busca').style.display = tab==='busca' ? 'block' : 'none';
+  document.getElementById('view-salvas').style.display = tab==='salvas' ? 'block' : 'none';
+  document.getElementById('tab-busca').classList.toggle('active', tab==='busca');
+  document.getElementById('tab-salvas').classList.toggle('active', tab==='salvas');
+  if(tab==='salvas') renderSalvas();
+}
+
+function renderSalvas(){
+  const lista = getSalvas();
+  const el = document.getElementById('saved-list');
+  if(lista.length === 0){
+    el.innerHTML = `
+      <div class="empty-saved">
+        <div class="empty-saved-icon">♦</div>
+        <div class="empty-saved-title">Nenhuma receita salva ainda</div>
+        <div class="empty-saved-sub">Clique em "Salvar receita" em qualquer resultado para guardá-la aqui</div>
+      </div>`;
+    return;
+  }
+
+  let html = `<div class="result-header" style="margin-bottom:24px">
+    <div class="result-title">${lista.length} receita${lista.length>1?'s':''} salva${lista.length>1?'s':''}</div>
+  </div>`;
+
+  lista.forEach(r => {
+    html += `
+    <div class="recipe-card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
+        <div class="recipe-num">Salva em ${r._savedAt||'—'}</div>
+        <button class="remove-btn" onclick="removerReceita(${JSON.stringify(r.nome).replace(/"/g,'&quot;')})">Remover</button>
+      </div>
+      <div class="recipe-name">${r.nome}</div>
+      <div class="recipe-tags">
+        <span class="tag ${tagClass(r.categoria)}">${r.categoria}</span>
+        <span class="tag tag-dif">${r.dificuldade}</span>
+        <span class="tag tag-time">${r.tempo}</span>
+        <span class="tag tag-mood">${r.porcoes}</span>
+      </div>
+      <div class="recipe-desc">${r.descricao}</div>
+      <div class="recipe-sections">
+        <div class="rs-box">
+          <div class="rs-label">Ingredientes</div>
+          <ul class="rs-list">${r.ingredientes.map(i=>`<li>${i}</li>`).join('')}</ul>
+        </div>
+        <div class="rs-box">
+          <div class="rs-label">Técnica essencial</div>
+          <ul class="rs-list">${r.tecnica.map(t=>`<li>${t}</li>`).join('')}</ul>
+        </div>
+      </div>
+      <div class="wine-row">
+        <div class="rs-label">Harmonização de vinhos</div>
+        <div class="wine-chips">${r.vinhos.map(v=>`<span class="wine-chip">${v}</span>`).join('')}</div>
+      </div>
+      <div class="dica-box">
+        <div class="dica-label">Dica do chef</div>
+        <div class="dica-text">${r.dica_chef}</div>
+      </div>
+    </div>`;
+  });
+
+  el.innerHTML = html;
+}
+
+// ============================================================
+// CHIPS
+// ============================================================
+function getChips(id){
+  return [...document.querySelectorAll(`#${id} .chip.on`)].map(c=>c.dataset.val);
+}
+document.querySelectorAll('.chip').forEach(c=>c.onclick=()=>c.classList.toggle('on'));
+atualizarBadge();
+
+// ============================================================
+// LOADING MESSAGES
+// ============================================================
+const loadingMsgs=[
+  'Analisando o perfil do seu encontro...',
+  'Selecionando ingredientes nobres...',
+  'Harmonizando vinhos...',
+  'Preparando a mise en place...',
+  'Finalizando o cardápio exclusivo...'
+];
+
+// ============================================================
+// LÓGICA DE SELEÇÃO LOCAL
+// ============================================================
+function selecionarReceitas(proteinas, dificuldade, restricoes){
+  let pool = [...DB.receitas];
+
+  // Filtro de restrições alimentares (múltiplas)
+  if(restricoes.includes('Sem frutos do mar')){
+    pool = pool.filter(r => r.categoria !== 'Frutos do Mar');
+  }
+
+  // Mapa das proteínas selecionadas para categorias do banco
+  const mapaProteina = {
+    'Peixe': 'Peixe',
+    'Frutos do mar': 'Frutos do Mar',
+    'Carne vermelha': 'Carne',
+    'Aves': 'Carne' // aproximação — pato está em Carne
+  };
+  const categoriasDesejadas = proteinas.map(p => mapaProteina[p]).filter(Boolean);
+
+  // Filtra por proteína se houver preferência
+  if(categoriasDesejadas.length > 0){
+    const filtradas = pool.filter(r => categoriasDesejadas.includes(r.categoria));
+    if(filtradas.length >= 3) pool = filtradas;
+  }
+
+  // Filtra por dificuldade se não for "Qualquer nível"
+  if(dificuldade && !dificuldade.startsWith('Qualquer')){
+    const nivel = dificuldade.includes('Fácil') ? 'Fácil' : dificuldade.includes('Média') ? 'Média' : 'Alta';
+    const filtradas = pool.filter(r => r.dificuldade === nivel);
+    if(filtradas.length >= 3) pool = filtradas;
+  }
+
+  // Embaralha e pega 3
+  pool.sort(() => Math.random() - 0.5);
+  return pool.slice(0, 3);
+}
+
+function introParaTipo(tipo){
+  const intros = {
+    'Jantar romântico': 'Uma noite que merece cada detalhe — selecionamos três joias gastronômicas para tornar este momento inesquecível.',
+    'Almoço de negócios': 'Elegância e precisão à mesa — receitas que impressionam sem perder o foco da conversa.',
+    'Reunião familiar especial': 'A generosidade da alta gastronomia em pratos que abraçam e celebram quem você ama.',
+    'Aniversário íntimo': 'Um cardápio à altura de cada ano vivido — sofisticado, pessoal e memorável.',
+    'Celebração entre amigos': 'Receitas que transformam uma mesa comum em experiência extraordinária.',
+    'Pedido de casamento': 'O momento mais importante merece o cardápio mais especial — cada prato, um capítulo da sua história.',
+    'Degustação temática': 'Uma viagem sensorial cuidadosamente curada para paladares exigentes.'
+  };
+  return intros[tipo] || 'Selecionamos um cardápio exclusivo e personalizado para o seu encontro especial.';
+}
+
+function notaSommelier(receitas){
+  const temChampagne = receitas.some(r => r.harmonizacao.vinhos.some(v => v.toLowerCase().includes('champagne')));
+  const temTinto = receitas.some(r => r.harmonizacao.temperatura_servico && parseInt(r.harmonizacao.temperatura_servico) > 14);
+  if(temChampagne) return 'A presença do Champagne neste cardápio eleva cada momento — sirva sempre bem gelado entre 7-9°C para preservar a efervescência e a mineralidade.';
+  if(temTinto) return 'Os vinhos tintos selecionados pedem uma hora de decantação antes do serviço — esse gesto simples revela toda a complexidade das uvas nobres escolhidas.';
+  return 'A temperatura de serviço é decisiva na alta gastronomia. Resfrie as taças antes de servir os brancos e mantenha os tintos longe de variações bruscas de temperatura.';
+}
+
+// ============================================================
+// BUSCA PRINCIPAL — MODO LOCAL
+// ============================================================
+async function buscarReceitas(){
+  const tipo = document.getElementById('tipo').value;
+  if(!tipo){alert('Por favor, selecione o tipo de encontro.');return;}
+
+  const proteinas = getChips('chips-proteina');
+  const dificuldade = document.getElementById('dificuldade').value;
+  const restricoes = getChips('chips-restricoes');
+
+  document.getElementById('form-area').style.display='none';
+  document.getElementById('loading-area').style.display='block';
+  document.getElementById('error-area').innerHTML='';
+
+  let idx=0;
+  const interval=setInterval(()=>{
+    idx=(idx+1)%loadingMsgs.length;
+    const el=document.getElementById('loading-sub');
+    if(el)el.textContent=loadingMsgs[idx];
+  },700);
+
+  // Simula um pequeno delay para a animação de loading aparecer
+  await new Promise(r => setTimeout(r, 2200));
+  clearInterval(interval);
+
+  const selecionadas = selecionarReceitas(proteinas, dificuldade, restricoes);
+
+  const resultado = {
+    intro: introParaTipo(tipo),
+    receitas: selecionadas.map((r, i) => ({
+      numero: i + 1,
+      nome: r.nome,
+      categoria: r.categoria,
+      clima: `Uma escolha perfeita para um ${tipo.toLowerCase()} — sofisticado e memorável.`,
+      descricao: r.descricao,
+      tempo: r.tempo_preparo,
+      dificuldade: r.dificuldade,
+      porcoes: r.porcoes,
+      ingredientes: r.ingredientes.map(ing => `${ing.item} — ${ing.quantidade}`),
+      tecnica: r.tecnica,
+      vinhos: r.harmonizacao.vinhos,
+      mesa: r.mise_en_place.map(m => ({nome: m.item, desc: m.sugestao})),
+      dica_chef: r.dica_chef,
+      foto: r.foto || null
+    })),
+    nota_sommelier: notaSommelier(selecionadas)
+  };
+
+  document.getElementById('loading-area').style.display='none';
+  renderResults(resultado, tipo);
+}
+
+// ============================================================
+// RENDERIZAÇÃO DOS RESULTADOS
+// ============================================================
+function tagClass(cat){
+  return{Peixe:'tag-cat','Frutos do Mar':'tag-cat',Carne:'tag-dif',Ave:'tag-dif',Vegetariano:'tag-mood'}[cat]||'tag-cat';
+}
+
+function renderResults(data,tipo){
+  const area=document.getElementById('result-area');
+  area.style.display='block';
+  let html=`
+    <div class="result-header">
+      <div class="result-title">Cardápio para <strong>${tipo}</strong></div>
+      <button class="reset-btn" onclick="resetForm()">Nova busca</button>
+    </div>
+    <div class="match-note" style="margin-bottom:24px">${data.intro}</div>`;
+
+  data.receitas.forEach(r=>{
+    const salva = isSalva(r.nome);
+    const dadosJSON = JSON.stringify(r).replace(/"/g,'&quot;');
+    html+=`
+    <div class="recipe-card" data-receita="${dadosJSON}">
+      ${r.foto ? `<img src="${r.foto}" alt="${r.nome}" class="recipe-img">` : ''}
+      <div class="recipe-num">Receita ${r.numero} de ${data.receitas.length}</div>
+      <div class="recipe-name">${r.nome}</div>
+      <div class="recipe-tags">
+        <span class="tag ${tagClass(r.categoria)}">${r.categoria}</span>
+        <span class="tag tag-dif">${r.dificuldade}</span>
+        <span class="tag tag-time">${r.tempo}</span>
+        <span class="tag tag-mood">${r.porcoes}</span>
+      </div>
+      <div class="recipe-desc">${r.descricao}</div>
+      <div class="match-note" style="margin-bottom:20px">${r.clima}</div>
+      <div class="recipe-sections">
+        <div class="rs-box">
+          <div class="rs-label">Ingredientes</div>
+          <ul class="rs-list">${r.ingredientes.map(i=>`<li>${i}</li>`).join('')}</ul>
+        </div>
+        <div class="rs-box">
+          <div class="rs-label">Técnica essencial</div>
+          <ul class="rs-list">${r.tecnica.map(t=>`<li>${t}</li>`).join('')}</ul>
+        </div>
+      </div>
+      <div class="wine-row">
+        <div class="rs-label">Harmonização de vinhos</div>
+        <div class="wine-chips">${r.vinhos.map(v=>`<span class="wine-chip">${v}</span>`).join('')}</div>
+      </div>
+      <div class="table-row">
+        <div class="rs-label">Mise en place e apresentação da mesa</div>
+        <div class="table-items">${r.mesa.map(m=>`<div class="ti"><div class="ti-name">${m.nome}</div><div class="ti-desc">${m.desc}</div></div>`).join('')}</div>
+      </div>
+      <div class="dica-box">
+        <div class="dica-label">Dica do chef</div>
+        <div class="dica-text">${r.dica_chef}</div>
+      </div>
+      <button class="save-btn ${salva?'saved':''}" onclick="toggleSalvar(${JSON.stringify(r.nome).replace(/"/g,'&quot;')}, this)">
+        ${iconeSalvar(salva)} ${salva ? 'Salva' : 'Salvar receita'}
+      </button>
+    </div>`;
+  });
+
+  html+=`
+    <div class="sommelier-box">
+      <div class="sommelier-icon">♦</div>
+      <div>
+        <div class="sommelier-label">Nota do Sommelier</div>
+        <div class="sommelier-text">${data.nota_sommelier}</div>
+      </div>
+    </div>
+    <button class="new-search-btn" onclick="resetForm()">Fazer nova busca</button>`;
+
+  area.innerHTML=html;
+  area.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function resetForm(){
+  document.getElementById('result-area').style.display='none';
+  document.getElementById('result-area').innerHTML='';
+  document.getElementById('form-area').style.display='block';
+  document.getElementById('error-area').innerHTML='';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+<script src="/js/api.js"></script>
+<script>
+// ── Renderiza barra de usuário no topo ────────────────────────
+(function(){
+  const bar  = document.getElementById('top-bar');
+  const user = typeof getUser === 'function' ? getUser() : null;
+  if(!bar) return;
+
+  if(user){
+    const badge = user.plano === 'gratuito'
+      ? `<span class="plan-badge free">Gratuito</span>`
+      : `<span class="plan-badge premium">${user.plano === 'anual' ? 'Anual' : 'Premium'}</span>`;
+    bar.innerHTML = `
+      <span class="user-name">${user.nome.split(' ')[0]}</span>
+      ${badge}
+      <button class="logout-btn" onclick="logout()">Sair</button>`;
+  } else {
+    bar.innerHTML = `
+      <a class="btn-login-top" href="/login.html">Entrar</a>`;
+  }
+})();
+</script>
+
+<!--
+=================================================================
+PARA ADICIONAR IA (Claude API) NO FUTURO:
+- Substitua a função buscarReceitas() pela versão com fetch à API
+- Use um backend Flask/FastAPI para proteger a chave de API
+=================================================================
+
+OPÇÃO 1 — FLASK (backend simples, recomendado)
+-----------------------------------------------
+pip install flask anthropic flask-cors
+
+# app.py
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+import anthropic, json
+
+app = Flask(__name__, static_folder='.')
+CORS(app)
+client = anthropic.Anthropic(api_key="SUA_CHAVE")
+
+@app.route('/')
+def index():
+    return app.send_static_file('encontro_premium.html')
+
+@app.route('/api/receitas', methods=['POST'])
+def receitas():
+    data = request.json
+    msg = client.messages.create(
+        model="claude-sonnet-4-20250514",
+        max_tokens=2000,
+        messages=[{"role": "user", "content": data['prompt']}]
+    )
+    return jsonify(json.loads(msg.content[0].text))
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+# No HTML: troque API_URL para '/api/receitas'
+# e remova o x-api-key do fetch (a chave fica no servidor)
+
+
+OPÇÃO 2 — FASTAPI (mais moderno)
+---------------------------------
+pip install fastapi uvicorn anthropic python-dotenv
+
+# main.py
+from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+import anthropic, json, os
+
+app = FastAPI()
+app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
+app.mount("/static", StaticFiles(directory="."), name="static")
+client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+
+class Payload(BaseModel):
+    prompt: str
+
+@app.post("/api/receitas")
+async def receitas(payload: Payload):
+    msg = client.messages.create(
+        model="claude-sonnet-4-20250514",
+        max_tokens=2000,
+        messages=[{"role": "user", "content": payload.prompt}]
+    )
+    return json.loads(msg.content[0].text)
+
+# Rodar: uvicorn main:app --reload
+
+
+OPÇÃO 3 — SALVAR HISTÓRICO EM SQLITE
+--------------------------------------
+import sqlite3, json
+from datetime import datetime
+
+def salvar_busca(filtros: dict, receitas: dict):
+    conn = sqlite3.connect('buscas.db')
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS buscas (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            data TEXT,
+            tipo TEXT,
+            filtros TEXT,
+            resultado TEXT
+        )
+    """)
+    conn.execute("INSERT INTO buscas VALUES (NULL,?,?,?,?)", (
+        datetime.now().isoformat(),
+        filtros.get('tipo'),
+        json.dumps(filtros, ensure_ascii=False),
+        json.dumps(receitas, ensure_ascii=False)
+    ))
+    conn.commit()
+    conn.close()
+
+
+OPÇÃO 4 — EXPORTAR CARDÁPIO EM PDF
+------------------------------------
+pip install weasyprint
+# ou
+pip install reportlab
+
+from weasyprint import HTML
+HTML(filename='encontro_premium.html').write_pdf('cardapio.pdf')
+
+
+ESTRUTURA RECOMENDADA DO PROJETO
+----------------------------------
+encontro_premium/
+├── encontro_premium.html   (este arquivo)
+├── app.py                  (Flask ou FastAPI)
+├── database.py             (SQLite / PostgreSQL)
+├── export_pdf.py           (geração de PDF)
+├── .env                    (ANTHROPIC_API_KEY=sk-ant-...)
+└── requirements.txt
+
+=================================================================
+-->
+</body>
+</html>

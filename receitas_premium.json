@@ -1,0 +1,361 @@
+{
+  "metadata": {
+    "titulo": "Receitas Premium — Alta Gastronomia",
+    "versao": "1.0",
+    "total": 10,
+    "categorias": ["Peixe", "Frutos do Mar", "Carne"],
+    "criado_em": "2026-03-21"
+  },
+  "receitas": [
+    {
+      "id": 1,
+      "nome": "Robalo Selvagem com Beurre Blanc de Champagne",
+      "categoria": "Peixe",
+      "descricao": "Filé de robalo selvagem selado em manteiga de noisette, acompanhado de molho beurre blanc feito com Champagne Brut e échalotes. Finalizado com caviar Oscietra e erva-doce caramelizada.",
+      "tempo_preparo": "55 min",
+      "dificuldade": "Alta",
+      "porcoes": "2 pessoas",
+      "ingredientes": [
+        {"item": "Robalo selvagem", "quantidade": "400g"},
+        {"item": "Champagne Brut", "quantidade": "150ml"},
+        {"item": "Manteiga francesa", "quantidade": "180g"},
+        {"item": "Échalotes", "quantidade": "60g"},
+        {"item": "Caviar Oscietra", "quantidade": "20g"},
+        {"item": "Erva-doce baby", "quantidade": "a gosto"},
+        {"item": "Creme de leite fresco", "quantidade": "50ml"},
+        {"item": "Limão siciliano", "quantidade": "1 unidade"}
+      ],
+      "tecnica": [
+        "Selar o peixe na frigideira de ferro fundido",
+        "Reduzir Champagne com échalotes até 1/3",
+        "Montar o beurre blanc em banho-maria",
+        "Finalizar com caviar na hora de servir"
+      ],
+      "harmonizacao": {
+        "vinhos": ["Champagne Blanc de Blancs", "Chablis Premier Cru", "Puligny-Montrachet"],
+        "temperatura_servico": "8-10°C"
+      },
+      "mise_en_place": [
+        {"item": "Louça de porcelana branca", "sugestao": "Rosenthal ou Wedgwood"},
+        {"item": "Taça flûte gravada", "sugestao": "Riedel Vinum"},
+        {"item": "Centro de orquídeas brancas", "sugestao": "Baixo para não cobrir o convidado"}
+      ],
+      "dica_chef": "Usar manteiga gelada em cubos pequenos para montar o beurre blanc garante emulsão perfeita e textura aveludada."
+    },
+    {
+      "id": 2,
+      "nome": "Lagosta Termidor com Bisque Dourado",
+      "categoria": "Frutos do Mar",
+      "descricao": "Lagosta inteira flambada com Cognac, gratinada com molho Thermidor de mostarda de Dijon, estragão fresco e Gruyère AOP envelhecido. Bisque dourado feito com as cascas e Armagnac.",
+      "tempo_preparo": "90 min",
+      "dificuldade": "Alta",
+      "porcoes": "2 pessoas",
+      "ingredientes": [
+        {"item": "Lagosta viva", "quantidade": "800g"},
+        {"item": "Cognac VSOP", "quantidade": "80ml"},
+        {"item": "Mostarda de Dijon", "quantidade": "2 colheres de sopa"},
+        {"item": "Gruyère AOP", "quantidade": "80g"},
+        {"item": "Estragão fresco", "quantidade": "a gosto"},
+        {"item": "Manteiga clarificada", "quantidade": "60g"},
+        {"item": "Creme duplo", "quantidade": "100ml"},
+        {"item": "Fundo de crustáceo", "quantidade": "200ml"}
+      ],
+      "tecnica": [
+        "Colocar lagosta no freezer por 30 min antes de cortar ao meio",
+        "Flambar com Cognac em alta chama",
+        "Preparar o molho Thermidor com redução de vinho branco",
+        "Gratinar a 220°C por 8 minutos"
+      ],
+      "harmonizacao": {
+        "vinhos": ["Meursault Charmes", "Corton-Charlemagne", "Montrachet Grand Cru"],
+        "temperatura_servico": "10-12°C"
+      },
+      "mise_en_place": [
+        {"item": "Prato de porcelana com ouro", "sugestao": "Bernardaud Constance"},
+        {"item": "Tenaz de lagosta dourada", "sugestao": "Apresentar sobre prato de gelo"},
+        {"item": "Velas âmbar baixas", "sugestao": "Cria reflexo quente na porcelana"}
+      ],
+      "dica_chef": "Tostar levemente as cascas da lagosta antes de fazer o bisque libera melanoidinas que aprofundam o sabor em 3x."
+    },
+    {
+      "id": 3,
+      "nome": "Wagyu A5 com Jus de Trufas Negras",
+      "categoria": "Carne",
+      "descricao": "Picanha Wagyu japonês A5 grelhada no carvão de binchotan, com jus concentrado de trufas negras Périgord, purê de batata ratte com manteiga AOP e lâminas de trufa ao vivo.",
+      "tempo_preparo": "40 min",
+      "dificuldade": "Média",
+      "porcoes": "2 pessoas",
+      "ingredientes": [
+        {"item": "Wagyu A5", "quantidade": "300g"},
+        {"item": "Trufa negra Périgord", "quantidade": "30g"},
+        {"item": "Batata ratte", "quantidade": "300g"},
+        {"item": "Manteiga AOP Échiré", "quantidade": "100g"},
+        {"item": "Caldo de boi artesanal", "quantidade": "500ml"},
+        {"item": "Flor de sal de Guérande", "quantidade": "a gosto"},
+        {"item": "Tomilho fresco", "quantidade": "3 ramos"},
+        {"item": "Alho confitado", "quantidade": "4 dentes"}
+      ],
+      "tecnica": [
+        "Temperar apenas com flor de sal 1h antes",
+        "Grelhar no binchotan 2 min cada lado — ponto mal passado",
+        "Reduzir jus com trufa ralada na hora",
+        "Montar purê com manteiga gelada em pedaços"
+      ],
+      "harmonizacao": {
+        "vinhos": ["Pomerol (Pétrus)", "Barolo Riserva", "Hermitage Rouge"],
+        "temperatura_servico": "16-18°C"
+      },
+      "mise_en_place": [
+        {"item": "Ardósia negra polida", "sugestao": "Contrasta com a trufa e valoriza o wagyu"},
+        {"item": "Talheres prata maciça", "sugestao": "Christofle Malmaison"},
+        {"item": "Campânula de cristal", "sugestao": "Para apresentar o aroma da trufa"}
+      ],
+      "dica_chef": "Nunca usar sal grosso no wagyu A5 — o marmoreio já tem gordura suficiente para conduzir o sabor. Flor de sal só na finalização."
+    },
+    {
+      "id": 4,
+      "nome": "Atum Bluefin Tataki com Dashi de Kombu",
+      "categoria": "Peixe",
+      "descricao": "Ventrecha de atum bluefin levemente selada, molho ponzu artesanal com yuzu fresco, caldo dashi puríssimo de kombu e katsuobushi, acompanhado de daikon em conserva e ovas de salmão.",
+      "tempo_preparo": "35 min",
+      "dificuldade": "Média",
+      "porcoes": "2 pessoas",
+      "ingredientes": [
+        {"item": "Ventrecha de atum bluefin", "quantidade": "300g"},
+        {"item": "Kombu seco", "quantidade": "20g"},
+        {"item": "Katsuobushi", "quantidade": "15g"},
+        {"item": "Yuzu fresco", "quantidade": "2 unidades"},
+        {"item": "Shoyu artesanal", "quantidade": "60ml"},
+        {"item": "Mirin honkaku", "quantidade": "30ml"},
+        {"item": "Daikon", "quantidade": "200g"},
+        {"item": "Ovas de salmão", "quantidade": "30g"}
+      ],
+      "tecnica": [
+        "Preparar dashi frio 8h antes — kombu em água gelada",
+        "Selar o atum 15 seg cada lado em frigideira incandescente",
+        "Fatiar com faca Yanagiba em 45°",
+        "Montar o ponzu com yuzu fresco na hora"
+      ],
+      "harmonizacao": {
+        "vinhos": ["Sake Junmai Daiginjo", "Sancerre Blanc", "Vermentino di Gallura DOCG"],
+        "temperatura_servico": "9-11°C"
+      },
+      "mise_en_place": [
+        {"item": "Prato de cerâmica japonesa", "sugestao": "Barro esmaltado preto fosco"},
+        {"item": "Hashi de laca negra", "sugestao": "Apresentar sobre suporte de bambu"},
+        {"item": "Ikebana minimalista", "sugestao": "Uma flor de lótus no centro da mesa"}
+      ],
+      "dica_chef": "O dashi frio (mizudashi) extrai umami puro sem amargor — nunca ferva o kombu, isso destrói o glutamato."
+    },
+    {
+      "id": 5,
+      "nome": "Vieiras Saint-Jacques com Duxelles e Espuma de Ceps",
+      "categoria": "Frutos do Mar",
+      "descricao": "Vieiras frescas da Bretanha seladas em manteiga noisette, sobre cama de duxelles de cogumelos Paris e porcini, espuma aerada de ceps secos e chips de alcachofra de Jerusalém.",
+      "tempo_preparo": "50 min",
+      "dificuldade": "Alta",
+      "porcoes": "2 pessoas",
+      "ingredientes": [
+        {"item": "Vieiras Saint-Jacques frescas", "quantidade": "8 unidades"},
+        {"item": "Cogumelos porcini", "quantidade": "100g"},
+        {"item": "Ceps secos", "quantidade": "30g"},
+        {"item": "Manteiga noisette", "quantidade": "80g"},
+        {"item": "Alcachofra de Jerusalém", "quantidade": "200g"},
+        {"item": "Creme de leite 35%", "quantidade": "200ml"},
+        {"item": "Lecitina de soja", "quantidade": "2g"},
+        {"item": "Azeite extravirgem de solteiro", "quantidade": "30ml"}
+      ],
+      "tecnica": [
+        "Secar as vieiras por 2h na geladeira descobertas",
+        "Preparar duxelles com cogumelos em brunoise fino",
+        "Sifão para espuma: infusão de ceps + lecitina a 65°C",
+        "Selar vieiras 90 seg cada lado sem mover"
+      ],
+      "harmonizacao": {
+        "vinhos": ["Puligny-Montrachet 1er Cru", "Burgundy Chardonnay envelhecido", "Rioja Blanco Reserva"],
+        "temperatura_servico": "10-12°C"
+      },
+      "mise_en_place": [
+        {"item": "Concha natural de vieira", "sugestao": "Servir dentro da própria concha polida"},
+        {"item": "Guardanapo de linho belga", "sugestao": "Dobra envelope clássica"},
+        {"item": "Mini lanterna LED sob a concha", "sugestao": "Efeito translúcido ao servir"}
+      ],
+      "dica_chef": "Superfície seca é o segredo do selamento perfeito. A umidade impede a reação de Maillard e a vieira cozinha ao vapor."
+    },
+    {
+      "id": 6,
+      "nome": "Pato de Bresse com Molho Grand Veneur",
+      "categoria": "Carne",
+      "descricao": "Magret de pato AOP de Bresse confitado lentamente e finalizado crocante, com molho Grand Veneur de frutas vermelhas e Pinot Noir, purê de castanha e pera pochê ao vinho do Porto.",
+      "tempo_preparo": "120 min",
+      "dificuldade": "Alta",
+      "porcoes": "2 pessoas",
+      "ingredientes": [
+        {"item": "Magret de pato AOP", "quantidade": "2 unidades"},
+        {"item": "Pinot Noir da Borgonha", "quantidade": "200ml"},
+        {"item": "Frutas vermelhas frescas", "quantidade": "150g"},
+        {"item": "Castanha portuguesa", "quantidade": "300g"},
+        {"item": "Pera Williams", "quantidade": "2 unidades"},
+        {"item": "Porto Ruby Ramos Pinto", "quantidade": "150ml"},
+        {"item": "Fundo de caça concentrado", "quantidade": "300ml"},
+        {"item": "Genebro e cravo", "quantidade": "a gosto"}
+      ],
+      "tecnica": [
+        "Confitar o pato a 68°C por 3h",
+        "Cruzar cortes na pele e fritar começando com a frigideira fria",
+        "Reduzir o molho com os ossos tostados 4h antes",
+        "Poclear a pera 20 min em Porto e especiarias"
+      ],
+      "harmonizacao": {
+        "vinhos": ["Gevrey-Chambertin", "Côte de Nuits Villages", "Pinot Noir da Borgonha"],
+        "temperatura_servico": "16-18°C"
+      },
+      "mise_en_place": [
+        {"item": "Prato fundo de porcelana escura", "sugestao": "Realça o molho rubi e o pato dourado"},
+        {"item": "Guéridon de prata", "sugestao": "Tampa apresentada na mesa pelo sommelier"},
+        {"item": "Rosas vermelhas bordeaux", "sugestao": "Arranjo baixo lateral"}
+      ],
+      "dica_chef": "Começar a frigideira fria com a pele para baixo derrete a gordura subcutânea lentamente — resulta em pele crocante sem queimar."
+    },
+    {
+      "id": 7,
+      "nome": "Ostra Tsarskaya Gratinada com Champagne Sabayon",
+      "categoria": "Frutos do Mar",
+      "descricao": "Ostras Tsarskaya nº3 da Normandia levemente gratinadas com sabayon de Champagne Brut e ciboulette, sobre cama de sal grosso e algas. Servidas com granita de pepino e dill.",
+      "tempo_preparo": "30 min",
+      "dificuldade": "Média",
+      "porcoes": "2 pessoas",
+      "ingredientes": [
+        {"item": "Ostras Tsarskaya nº3", "quantidade": "12 unidades"},
+        {"item": "Champagne Brut", "quantidade": "80ml"},
+        {"item": "Gemas de ovos caipira", "quantidade": "3 unidades"},
+        {"item": "Ciboulette fina", "quantidade": "a gosto"},
+        {"item": "Pepino japonês", "quantidade": "1 unidade"},
+        {"item": "Dill fresco", "quantidade": "a gosto"},
+        {"item": "Sal grosso Maldon", "quantidade": "200g"},
+        {"item": "Algas nori", "quantidade": "para decoração"}
+      ],
+      "tecnica": [
+        "Abrir as ostras e soltar do músculo, reservar a água",
+        "Bater sabayon sobre banho-maria até triplicar de volume",
+        "Gratinar levemente com maçarico de chef",
+        "Granita: bater suco de pepino com dill e congelar"
+      ],
+      "harmonizacao": {
+        "vinhos": ["Champagne Blanc de Blancs", "Muscadet Sèvre et Maine sur Lie", "Albariño Rias Baixas"],
+        "temperatura_servico": "6-8°C"
+      },
+      "mise_en_place": [
+        {"item": "Prato fundo com gelo picado", "sugestao": "Com algas decorativas frescas"},
+        {"item": "Faca de ostra com cabo em madrepérola", "sugestao": "Deixar à vista — é parte do ritual"},
+        {"item": "Flûtes de cristal soprado", "sugestao": "Baccarat Château Baccarat"}
+      ],
+      "dica_chef": "O sabayon deve ser montado e servido imediatamente — ele colapsa em 8 minutos. Prepare tudo antes de bater."
+    },
+    {
+      "id": 8,
+      "nome": "Linguado Meunière com Caviar e Limão Confitado",
+      "categoria": "Peixe",
+      "descricao": "Linguado inteiro de 600g preparado à meunière clássica em manteiga dourada, finalizado com limão siciliano confitado em azeite, alcaparras de Pantelleria e caviar Beluga ao final.",
+      "tempo_preparo": "45 min",
+      "dificuldade": "Alta",
+      "porcoes": "2 pessoas",
+      "ingredientes": [
+        {"item": "Linguado de linha inteiro", "quantidade": "600g"},
+        {"item": "Manteiga francesa extra", "quantidade": "150g"},
+        {"item": "Limão siciliano", "quantidade": "2 unidades"},
+        {"item": "Alcaparras de Pantelleria", "quantidade": "20g"},
+        {"item": "Caviar Beluga", "quantidade": "15g"},
+        {"item": "Farinha de trigo T45", "quantidade": "50g"},
+        {"item": "Salsinha de folha plana", "quantidade": "a gosto"},
+        {"item": "Azeite de leccino", "quantidade": "30ml"}
+      ],
+      "tecnica": [
+        "Retirar a pele preta do linguado",
+        "Passar na farinha apenas na hora de cozinhar",
+        "Manteiga deve espumar mas não queimar — noisette",
+        "Desossar à mesa — é parte do serviço"
+      ],
+      "harmonizacao": {
+        "vinhos": ["Meursault Les Genevrières", "Pessac-Léognan Blanc", "Grüner Veltliner Smaragd"],
+        "temperatura_servico": "10-12°C"
+      },
+      "mise_en_place": [
+        {"item": "Mesa guéridon para filetar na hora", "sugestao": "Apresentação cerimonial clássica"},
+        {"item": "Prato oval de porcelana branca", "sugestao": "Villeroy & Boch New Wave"},
+        {"item": "Pinça de peixe de prata", "sugestao": "Parte do mise en place visível ao cliente"}
+      ],
+      "dica_chef": "Farinha T45 (mais fina) cria crosta mais delicada que a T55. Nunca enfarinhe com antecedência — a umidade arruína o crocante."
+    },
+    {
+      "id": 9,
+      "nome": "Costela Short Rib 72h com Purê de Manteiga Negra",
+      "categoria": "Carne",
+      "descricao": "Short rib sous-vide 72 horas a 72°C, finalizado em brasa de carvalho, purê montado com manteiga negra e caldo de osso concentrado, acompanhado de cenoura roxa glaceada ao mel de lavanda.",
+      "tempo_preparo": "72h + 30 min finalização",
+      "dificuldade": "Alta",
+      "porcoes": "2 pessoas",
+      "ingredientes": [
+        {"item": "Short rib", "quantidade": "800g"},
+        {"item": "Manteiga noisette escura", "quantidade": "120g"},
+        {"item": "Caldo de osso assado", "quantidade": "1 litro"},
+        {"item": "Cenoura roxa", "quantidade": "4 unidades"},
+        {"item": "Mel de lavanda", "quantidade": "30ml"},
+        {"item": "Tomilho e alecrim fresco", "quantidade": "a gosto"},
+        {"item": "Batata asterix", "quantidade": "400g"},
+        {"item": "Flor de sal defumado", "quantidade": "a gosto"}
+      ],
+      "tecnica": [
+        "Selar a costela antes do sous-vide para reação de Maillard",
+        "Banho a 72°C por 72h — câmbio de água a cada 24h opcional",
+        "Finalizar 2 min por lado na brasa alta de carvalho",
+        "Purê: processar com manteiga gelada até textura sedosa"
+      ],
+      "harmonizacao": {
+        "vinhos": ["Châteauneuf-du-Pape", "Napa Valley Cabernet Sauvignon", "Malbec de Luján de Cuyo Alta"],
+        "temperatura_servico": "17-19°C"
+      },
+      "mise_en_place": [
+        {"item": "Ardósia aquecida a 60°C", "sugestao": "Mantém a carne quente ao longo do serviço"},
+        {"item": "Faca de trinchar à mesa", "sugestao": "Cortar diante do comensal"},
+        {"item": "Ramos de alecrim decorativos", "sugestao": "Na ardósia, ao lado da carne"}
+      ],
+      "dica_chef": "Selar antes E depois do sous-vide é possível — o segundo selamento na brasa reativa os aromas de Maillard que a água dissipou."
+    },
+    {
+      "id": 10,
+      "nome": "Camarão VG Flamejado com Bisque de Laranja",
+      "categoria": "Frutos do Mar",
+      "descricao": "Camarão VG (Very Giant) inteiro flambado com Calvados, bisque refinado com zest de laranja sanguínea e erva-doce, servido com arroz basmati em caldo de açafrão e chips de gengibre.",
+      "tempo_preparo": "60 min",
+      "dificuldade": "Média",
+      "porcoes": "2 pessoas",
+      "ingredientes": [
+        {"item": "Camarão VG inteiro", "quantidade": "600g"},
+        {"item": "Calvados", "quantidade": "80ml"},
+        {"item": "Laranja sanguínea", "quantidade": "3 unidades"},
+        {"item": "Erva-doce bulbo", "quantidade": "1 unidade"},
+        {"item": "Açafrão La Mancha", "quantidade": "0,5g"},
+        {"item": "Arroz basmati extra long", "quantidade": "200g"},
+        {"item": "Gengibre fresco", "quantidade": "40g"},
+        {"item": "Manteiga noisette", "quantidade": "60g"}
+      ],
+      "tecnica": [
+        "Flambar o camarão diante do comensal — espetáculo incluído",
+        "Bisque: tostar as cascas a seco antes de umedecer",
+        "Caldo de açafrão: infundir 15 min a 70°C sem ferver",
+        "Chips de gengibre: fatiar em mandoline e desidratar 2h a 80°C"
+      ],
+      "harmonizacao": {
+        "vinhos": ["Condrieu Viognier", "Alsace Riesling Grand Cru", "Viré-Clessé Vieilles Vignes"],
+        "temperatura_servico": "10-12°C"
+      },
+      "mise_en_place": [
+        {"item": "Rechaud à álcool na mesa", "sugestao": "Para o flambé ao vivo diante dos convidados"},
+        {"item": "Prato raso branco com aro dourado", "sugestao": "Bernardaud Eden Or"},
+        {"item": "Guardanapo broderie anglaise", "sugestao": "Dobra clássica em tulipa"}
+      ],
+      "dica_chef": "Calvados (maçã) harmoniza melhor com crustáceos do que Cognac (uva) — a fruta dá leveza sem mascarar o iodo do camarão."
+    }
+  ]
+}
