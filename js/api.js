@@ -3,7 +3,9 @@
 // Centraliza todas as chamadas ao backend FastAPI
 // ============================================================
 
-const API_BASE = 'http://localhost:8000';
+const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? 'http://localhost:8000'
+  : 'https://receita-premium.onrender.com';
 const TOKEN_KEY = 'chef_premium_token';
 const USER_KEY  = 'chef_premium_user';
 
