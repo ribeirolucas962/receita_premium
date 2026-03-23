@@ -4,6 +4,7 @@ sqlalchemy==2.0.43
 psycopg2-binary==2.9.10
 python-jose[cryptography]==3.5.0
 passlib[bcrypt]==1.7.4
+bcrypt==3.2.2
 python-multipart==0.0.22
 aiofiles==25.1.0
 python-dotenv==1.0.0
