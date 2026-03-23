@@ -125,7 +125,9 @@ body{
 </div>
 
 <script>
-const API_BASE  = 'http://localhost:8000';
+const API_BASE  = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+  ? 'http://localhost:8000'
+  : 'https://receita-premium.onrender.com';
 const TOKEN_KEY = 'chef_premium_token';
 const USER_KEY  = 'chef_premium_user';
 function getToken()   { return localStorage.getItem(TOKEN_KEY); }
@@ -151,7 +153,7 @@ async function login(email, senha) {
 if (location.protocol === 'file:') {
   document.body.innerHTML = '<div style="font-family:sans-serif;text-align:center;padding:60px;color:#C9A84C;background:#0E0D0B;min-height:100vh"><h2>Acesse pelo servidor</h2><p style="color:#888;margin-top:12px">Abra no navegador: <a href="http://localhost:8000/login.html" style="color:#C9A84C">http://localhost:8000/login.html</a></p></div>';
 }
-if (estaLogado()) window.location.href = 'http://localhost:8000/';
+if (estaLogado()) window.location.href = '/';
 
 async function fazerLogin(e) {
   e.preventDefault();

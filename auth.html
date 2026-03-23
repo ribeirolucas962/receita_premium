@@ -195,7 +195,9 @@ body{
 </div>
 
 <script>
-const API_BASE  = 'http://localhost:8000';
+const API_BASE  = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+  ? 'http://localhost:8000'
+  : 'https://receita-premium.onrender.com';
 const TOKEN_KEY = 'chef_premium_token';
 const USER_KEY  = 'chef_premium_user';
 
@@ -205,7 +207,7 @@ function setUser(u)   { localStorage.setItem(USER_KEY, JSON.stringify(u)); }
 function estaLogado() { return !!getToken(); }
 
 // Redireciona se já logado
-if (estaLogado()) window.location.href = 'http://localhost:8000/';
+if (estaLogado()) window.location.href = '/';
 
 // Detecta file://
 if (location.protocol === 'file:') {
@@ -266,7 +268,7 @@ async function fazerLogin(e) {
     setUser({ nome: data.nome, plano: data.plano });
     ok.textContent = `Bem-vindo, ${data.nome}! Redirecionando...`;
     ok.style.display = 'block';
-    setTimeout(() => window.location.href = 'http://localhost:8000/', 1000);
+    setTimeout(() => window.location.href = '/', 1000);
   } catch(err) {
     erro.textContent = err.message;
     erro.style.display = 'block';
@@ -302,7 +304,7 @@ async function fazerCadastro(e) {
     setUser({ nome: data.nome, plano: data.plano });
     ok.textContent = `Conta criada! Bem-vindo, ${data.nome}. Redirecionando...`;
     ok.style.display = 'block';
-    setTimeout(() => window.location.href = 'http://localhost:8000/', 1200);
+    setTimeout(() => window.location.href = '/', 1200);
   } catch(err) {
     erro.textContent = err.message;
     erro.style.display = 'block';
