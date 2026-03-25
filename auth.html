@@ -70,6 +70,15 @@ body{
 .field-input:focus{border-color:rgba(201,168,76,.5);box-shadow:0 0 0 3px rgba(201,168,76,.07)}
 .field-input::placeholder{color:var(--text3)}
 .field-hint{font-size:11px;color:var(--text3);margin-top:5px;font-weight:300}
+/* Campo de senha com botão ver/ocultar */
+.senha-wrapper{position:relative}
+.senha-wrapper .field-input{padding-right:44px}
+.btn-ver-senha{
+  position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  background:transparent;border:none;cursor:pointer;padding:4px;
+  color:var(--text3);transition:color .2s;line-height:0;
+}
+.btn-ver-senha:hover{color:var(--gold)}
 
 /* Planos */
 .planos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:4px}
@@ -142,7 +151,12 @@ body{
         </div>
         <div class="field">
           <label class="field-label" for="login-senha">Senha</label>
-          <input class="field-input" type="password" id="login-senha" placeholder="••••••••" required autocomplete="current-password">
+          <div class="senha-wrapper">
+            <input class="field-input" type="password" id="login-senha" placeholder="••••••••" required autocomplete="current-password">
+            <button type="button" class="btn-ver-senha" onclick="toggleSenha('login-senha', this)" title="Ver senha">
+              <svg id="icon-login-senha" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
         </div>
         <button class="btn" type="submit" id="btn-login">Entrar na minha conta</button>
       </form>
@@ -163,7 +177,12 @@ body{
         </div>
         <div class="field">
           <label class="field-label" for="cad-senha">Senha</label>
-          <input class="field-input" type="password" id="cad-senha" placeholder="Mínimo 6 caracteres" required minlength="6" autocomplete="new-password">
+          <div class="senha-wrapper">
+            <input class="field-input" type="password" id="cad-senha" placeholder="Mínimo 6 caracteres" required minlength="6" autocomplete="new-password">
+            <button type="button" class="btn-ver-senha" onclick="toggleSenha('cad-senha', this)" title="Ver senha">
+              <svg id="icon-cad-senha" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
           <div class="field-hint">Use letras e números para maior segurança</div>
         </div>
         <div class="field">
@@ -220,6 +239,23 @@ if (location.protocol === 'file:') {
         </a>
       </p>
     </div>`;
+}
+
+// ── Ver/ocultar senha ─────────────────────────────────────────
+function toggleSenha(inputId, btn) {
+  const input = document.getElementById(inputId);
+  const iconeOlho = `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>`;
+  const iconeRiscado = `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>`;
+  const svg = btn.querySelector('svg');
+  if (input.type === 'password') {
+    input.type = 'text';
+    svg.innerHTML = iconeRiscado;
+    btn.title = 'Ocultar senha';
+  } else {
+    input.type = 'password';
+    svg.innerHTML = iconeOlho;
+    btn.title = 'Ver senha';
+  }
 }
 
 // ── Tabs ─────────────────────────────────────────────────────
