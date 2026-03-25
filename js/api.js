@@ -10,9 +10,9 @@ const TOKEN_KEY = 'chef_premium_token';
 const USER_KEY  = 'chef_premium_user';
 
 // ── Token ────────────────────────────────────────────────────
-function getToken()          { return localStorage.getItem(TOKEN_KEY); }
+function getToken()          { return localStorage.getItem(TOKEN_KEY) || sessionStorage.getItem(TOKEN_KEY); }
 function setToken(token)     { localStorage.setItem(TOKEN_KEY, token); }
-function removeToken()       { localStorage.removeItem(TOKEN_KEY); localStorage.removeItem(USER_KEY); }
+function removeToken()       { localStorage.removeItem(TOKEN_KEY); sessionStorage.removeItem(TOKEN_KEY); localStorage.removeItem(USER_KEY); }
 
 function getUser()           { try { return JSON.parse(localStorage.getItem(USER_KEY)); } catch { return null; } }
 function setUser(user)       { localStorage.setItem(USER_KEY, JSON.stringify(user)); }
