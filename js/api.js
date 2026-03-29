@@ -91,6 +91,19 @@ async function removerFavorito(id)     { return apiFetch(`/favoritos/${id}`, { m
 // ── Planos ───────────────────────────────────────────────────
 async function listarPlanos()          { return apiFetch('/planos'); }
 
+// ── Fotos — Unsplash ─────────────────────────────────────────
+async function buscarFotoReceita(nome) {
+  return apiFetch(`/ia/foto?q=${encodeURIComponent(nome)}`);
+}
+
+// ── IA — Geração de receitas com Claude ──────────────────────
+async function gerarReceitaIA(dados) {
+  return apiFetch('/ia/gerar-receita', {
+    method: 'POST',
+    body: JSON.stringify(dados)
+  });
+}
+
 // ── Guard — redireciona se não logado ────────────────────────
 function requireAuth() {
   if (!estaLogado()) {

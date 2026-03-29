@@ -23,8 +23,8 @@
   --text:#F0EDE6;
   --text2:#B8B2A4;
   --text3:#7A7468;
-  --serif:'Cormorant Garamond',Georgia,serif;
-  --sans:'Inter',system-ui,sans-serif;
+  --serif:'Arial',sans-serif;
+  --sans:'Arial',sans-serif;
 }
 html{scroll-behavior:smooth}
 body{
@@ -361,6 +361,93 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
   font-size:13px;color:#E89090;margin-top:16px;line-height:1.65;
 }
 
+/* ── Ornamento de número da receita ── */
+.recipe-ornament{
+  display:flex;align-items:center;gap:14px;margin-bottom:20px;
+}
+.recipe-ornament-line{
+  flex:1;height:1px;
+  background:linear-gradient(to right,transparent,rgba(201,168,76,.25));
+}
+.recipe-ornament-line.rev{transform:scaleX(-1)}
+.recipe-ornament-num{
+  font-family:var(--serif);font-size:12px;color:var(--gold);
+  letter-spacing:.2em;opacity:.8;white-space:nowrap;
+}
+
+/* ── Stats bar ── */
+.recipe-stats{
+  display:flex;margin-bottom:22px;
+  border:1px solid var(--border2);border-radius:14px;overflow:hidden;
+  background:var(--dark3);
+}
+.stat-item{
+  flex:1;padding:14px 10px;text-align:center;
+  border-right:1px solid var(--border2);
+}
+.stat-item:last-child{border-right:none}
+.stat-icon{font-size:18px;margin-bottom:5px;line-height:1}
+.stat-label{
+  font-size:8px;color:var(--gold);text-transform:uppercase;
+  letter-spacing:.14em;margin-bottom:4px;font-weight:500;opacity:.8;
+}
+.stat-value{font-size:12px;color:var(--text2);font-weight:300}
+
+/* ── Passos numerados ── */
+.step-item{
+  display:flex;gap:12px;padding:9px 0;
+  border-bottom:1px solid rgba(255,255,255,.04);
+}
+.step-item:last-child{border-bottom:none}
+.step-num{
+  font-family:var(--serif);font-size:20px;color:var(--gold);
+  opacity:.35;min-width:26px;line-height:1.2;flex-shrink:0;
+}
+.step-text{
+  font-size:12px;color:var(--text2);line-height:1.75;
+  font-weight:300;padding-top:3px;
+}
+
+/* ── Divisor entre receitas ── */
+.recipe-divider{
+  display:flex;align-items:center;gap:16px;
+  margin:8px 0 28px;
+}
+.recipe-divider span{
+  flex:1;height:1px;
+  background:linear-gradient(to right,transparent,var(--border),transparent);
+}
+.recipe-divider i{
+  font-family:var(--serif);font-size:18px;color:var(--gold);
+  opacity:.3;font-style:normal;
+}
+
+/* ── Vinho melhorado ── */
+.wine-header{
+  display:flex;align-items:center;gap:10px;margin-bottom:12px;
+}
+.wine-icon{
+  width:32px;height:32px;border-radius:50%;
+  background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.2);
+  display:flex;align-items:center;justify-content:center;font-size:16px;
+  flex-shrink:0;
+}
+
+/* ── Dica do chef melhorada ── */
+.dica-box-v2{
+  background:linear-gradient(135deg,rgba(201,168,76,.07),rgba(201,168,76,.03));
+  border:1px solid rgba(201,168,76,.18);
+  border-radius:14px;padding:18px 20px;margin-top:16px;
+  position:relative;overflow:hidden;
+}
+.dica-box-v2::before{
+  content:'';position:absolute;top:0;left:0;bottom:0;width:3px;
+  background:linear-gradient(to bottom,var(--gold),rgba(201,168,76,.3));
+  border-radius:3px 0 0 3px;
+}
+.dica-box-v2 .dica-label{margin-bottom:8px}
+.dica-box-v2 .dica-text{font-size:13px;line-height:1.75}
+
 /* ── Responsive ── */
 @media(max-width:580px){
   .brand-title{font-size:38px}
@@ -372,6 +459,42 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
   .recipe-sections{grid-template-columns:1fr}
   .table-items{grid-template-columns:1fr 1fr}
   .sommelier-box{flex-direction:column;gap:8px}
+}
+
+/* ── Botão IA ── */
+.ia-btn{
+  width:100%;margin-top:10px;padding:14px;
+  font-size:12px;font-weight:400;letter-spacing:.12em;text-transform:uppercase;
+  border:1px solid rgba(201,168,76,.5);
+  border-radius:12px;
+  background:linear-gradient(135deg,rgba(201,168,76,.18) 0%,rgba(201,168,76,.08) 100%);
+  color:var(--gold);
+  cursor:pointer;transition:all .25s;font-family:var(--sans);
+  position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.ia-btn:hover{
+  box-shadow:0 0 40px rgba(201,168,76,.25),0 0 0 1px rgba(201,168,76,.4);
+  transform:translateY(-1px);
+  background:linear-gradient(135deg,rgba(201,168,76,.25) 0%,rgba(201,168,76,.12) 100%);
+}
+.ia-btn:disabled{opacity:.35;cursor:not-allowed;transform:none}
+.ia-btn-lock{
+  width:100%;margin-top:10px;padding:13px;
+  font-size:11px;font-weight:400;letter-spacing:.1em;text-transform:uppercase;
+  border:1px dashed rgba(201,168,76,.2);border-radius:12px;
+  background:transparent;color:var(--text3);cursor:default;
+  font-family:var(--sans);display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.ia-badge{
+  font-size:9px;padding:2px 7px;border-radius:20px;
+  background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.3);
+  color:var(--gold);font-weight:500;letter-spacing:.06em;
+}
+.ia-generated{
+  font-size:9px;padding:3px 9px;border-radius:20px;
+  background:linear-gradient(90deg,rgba(201,168,76,.2),rgba(201,168,76,.1));
+  border:1px solid rgba(201,168,76,.35);color:var(--gold);
+  font-weight:500;letter-spacing:.06em;display:inline-flex;align-items:center;gap:5px;margin-bottom:10px;
 }
 
 /* ── Save button ── */
@@ -562,6 +685,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
         </div>
       </div>
       <button class="submit-btn" id="submit-btn" onclick="buscarReceitas()">Encontrar minhas receitas premium</button>
+      <div id="ia-btn-area"></div>
     </div>
   </div>
 
@@ -863,24 +987,47 @@ function renderResults(data,tipo){
       <div class="result-title">Cardápio para <strong>${tipo}</strong></div>
       <button class="reset-btn" onclick="resetForm()">Nova busca</button>
     </div>
+    ${data._ia ? `<div style="margin-bottom:16px"><span class="ia-generated">✦ Gerado pelo Chef IA</span></div>` : ''}
     <div class="match-note" style="margin-bottom:24px">${data.intro}</div>`;
 
-  data.receitas.forEach(r=>{
+  const romanos = ['I','II','III'];
+  data.receitas.forEach((r,idx)=>{
     const salva = isSalva(r.nome);
     const dadosJSON = JSON.stringify(r).replace(/"/g,'&quot;');
+    const divisor = idx > 0 ? `<div class="recipe-divider"><span></span><i>✦</i><span></span></div>` : '';
     html+=`
+    ${divisor}
     <div class="recipe-card" data-receita="${dadosJSON}">
-      ${r.foto ? `<img src="${r.foto}" alt="${r.nome}" class="recipe-img">` : ''}
-      <div class="recipe-num">Receita ${r.numero} de ${data.receitas.length}</div>
+      <img id="foto-${idx}" src="${r.foto||''}" alt="${r.nome}" class="recipe-img" style="${r.foto?'':'display:none'}">
+      <div class="recipe-ornament">
+        <div class="recipe-ornament-line"></div>
+        <div class="recipe-ornament-num">Receita ${romanos[idx]||r.numero} de ${data.receitas.length}</div>
+        <div class="recipe-ornament-line rev"></div>
+      </div>
       <div class="recipe-name">${r.nome}</div>
-      <div class="recipe-tags">
+      <div class="recipe-tags" style="margin-bottom:16px">
         <span class="tag ${tagClass(r.categoria)}">${r.categoria}</span>
         <span class="tag tag-dif">${r.dificuldade}</span>
-        <span class="tag tag-time">${r.tempo}</span>
-        <span class="tag tag-mood">${r.porcoes}</span>
+      </div>
+      <div class="recipe-stats">
+        <div class="stat-item">
+          <div class="stat-icon">⏱</div>
+          <div class="stat-label">Tempo</div>
+          <div class="stat-value">${r.tempo}</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-icon">👨‍🍳</div>
+          <div class="stat-label">Dificuldade</div>
+          <div class="stat-value">${r.dificuldade}</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-icon">🍽</div>
+          <div class="stat-label">Porções</div>
+          <div class="stat-value">${r.porcoes}</div>
+        </div>
       </div>
       <div class="recipe-desc">${r.descricao}</div>
-      <div class="match-note" style="margin-bottom:20px">${r.clima}</div>
+      <div class="match-note" style="margin-bottom:24px">${r.clima}</div>
       <div class="recipe-sections">
         <div class="rs-box">
           <div class="rs-label">Ingredientes</div>
@@ -888,19 +1035,26 @@ function renderResults(data,tipo){
         </div>
         <div class="rs-box">
           <div class="rs-label">Técnica essencial</div>
-          <ul class="rs-list">${r.tecnica.map(t=>`<li>${t}</li>`).join('')}</ul>
+          ${r.tecnica.map((t,i)=>`
+            <div class="step-item">
+              <div class="step-num">${String(i+1).padStart(2,'0')}</div>
+              <div class="step-text">${t}</div>
+            </div>`).join('')}
         </div>
       </div>
-      <div class="wine-row">
-        <div class="rs-label">Harmonização de vinhos</div>
+      <div class="wine-row" style="margin-bottom:20px">
+        <div class="wine-header">
+          <div class="wine-icon">🍷</div>
+          <div class="rs-label" style="margin-bottom:0">Harmonização de vinhos</div>
+        </div>
         <div class="wine-chips">${r.vinhos.map(v=>`<span class="wine-chip">${v}</span>`).join('')}</div>
       </div>
       <div class="table-row">
         <div class="rs-label">Mise en place e apresentação da mesa</div>
         <div class="table-items">${r.mesa.map(m=>`<div class="ti"><div class="ti-name">${m.nome}</div><div class="ti-desc">${m.desc}</div></div>`).join('')}</div>
       </div>
-      <div class="dica-box">
-        <div class="dica-label">Dica do chef</div>
+      <div class="dica-box-v2">
+        <div class="dica-label">✦ Dica do Chef</div>
         <div class="dica-text">${r.dica_chef}</div>
       </div>
       <button class="save-btn ${salva?'saved':''}" onclick="toggleSalvar(${JSON.stringify(r.nome).replace(/"/g,'&quot;')}, this)">
@@ -921,6 +1075,60 @@ function renderResults(data,tipo){
 
   area.innerHTML=html;
   area.scrollIntoView({behavior:'smooth',block:'start'});
+  carregarFotos(data.receitas);
+}
+
+function termoBuscaFoto(r){
+  if(r.foto_busca) return r.foto_busca;
+  const mapa = {
+    'Peixe':        'gourmet fish fillet fine dining restaurant',
+    'Frutos do Mar':'gourmet seafood dish fine dining restaurant',
+    'Carne':        'gourmet beef steak fine dining restaurant',
+    'Aves':         'gourmet duck breast fine dining restaurant',
+    'Vegetariano':  'gourmet vegetarian dish fine dining restaurant'
+  };
+  return mapa[r.categoria] || 'gourmet dish fine dining';
+}
+
+async function carregarFotos(receitas){
+  receitas.forEach(async (r, idx) => {
+    if(r.foto) return;
+    const img = document.getElementById(`foto-${idx}`);
+    if(!img) return;
+
+    // Termos de busca em ordem de prioridade
+    const termos = [
+      termoBuscaFoto(r),
+      r.categoria === 'Peixe' ? 'fish fillet gourmet' :
+      r.categoria === 'Frutos do Mar' ? 'seafood gourmet plate' :
+      r.categoria === 'Carne' ? 'beef steak gourmet' :
+      'gourmet dish restaurant'
+    ];
+
+    for(const termo of termos){
+      try{
+        const data = await buscarFotoReceita(termo);
+        if(data && data.url){
+          img.src = data.url;
+          img.style.display = 'block';
+          return;
+        }
+      }catch{}
+    }
+
+    // Placeholder elegante se nenhuma foto encontrada
+    const wrap = img.parentElement;
+    img.remove();
+    const ph = document.createElement('div');
+    ph.style.cssText = `width:100%;height:200px;border-radius:12px;margin-bottom:20px;
+      background:linear-gradient(135deg,rgba(201,168,76,.08),rgba(201,168,76,.03));
+      border:1px solid rgba(201,168,76,.15);display:flex;align-items:center;
+      justify-content:center;flex-direction:column;gap:8px;`;
+    ph.innerHTML = `<div style="font-size:32px;opacity:.3">🍽</div>
+      <div style="font-size:11px;color:var(--text3);letter-spacing:.1em;text-transform:uppercase">
+        ${r.categoria || 'Alta Gastronomia'}</div>`;
+    wrap.insertBefore(ph, wrap.firstChild);
+  });
 }
 
 function resetForm(){
@@ -930,11 +1138,86 @@ function resetForm(){
   document.getElementById('error-area').innerHTML='';
   window.scrollTo({top:0,behavior:'smooth'});
 }
+
+// ============================================================
+// FASE 6 — GERAR RECEITA COM IA (Claude)
+// ============================================================
+function renderBotaoIA(){
+  const area = document.getElementById('ia-btn-area');
+  if(!area) return;
+  const user = typeof getUser === 'function' ? getUser() : null;
+  const isPremium = user && user.plano !== 'gratuito';
+  if(isPremium){
+    area.innerHTML = `
+      <button class="ia-btn" id="ia-btn" onclick="gerarComIA()">
+        <span style="font-size:14px;opacity:.8">✦</span>
+        Gerar receita exclusiva com IA
+        <span class="ia-badge">Premium</span>
+      </button>`;
+  } else {
+    area.innerHTML = `
+      <div class="ia-btn-lock">
+        <span style="font-size:12px">🔒</span>
+        Gerar com IA — exclusivo para assinantes
+      </div>`;
+  }
+}
+
+async function gerarComIA(){
+  const tipo = document.getElementById('tipo').value;
+  if(!tipo){alert('Por favor, selecione o tipo de encontro.');return;}
+
+  const dados = {
+    tipo,
+    pessoas:    document.getElementById('pessoas').value,
+    proteinas:  getChips('chips-proteina'),
+    dificuldade:document.getElementById('dificuldade').value,
+    ambiente:   document.getElementById('ambiente').value,
+    restricoes: getChips('chips-restricoes'),
+    vinhos:     getChips('chips-vinho'),
+    contexto:   document.getElementById('contexto').value
+  };
+
+  document.getElementById('form-area').style.display='none';
+  document.getElementById('loading-area').style.display='block';
+  document.getElementById('error-area').innerHTML='';
+
+  const msgsIA=[
+    'Consultando o Chef IA...',
+    'Criando receitas exclusivas para você...',
+    'Selecionando ingredientes nobres...',
+    'Harmonizando vinhos e aromas...',
+    'Finalizando seu cardápio personalizado...'
+  ];
+  let idx=0;
+  const interval=setInterval(()=>{
+    idx=(idx+1)%msgsIA.length;
+    const el=document.getElementById('loading-sub');
+    if(el)el.textContent=msgsIA[idx];
+  },900);
+
+  try{
+    const resultado = await gerarReceitaIA(dados);
+    clearInterval(interval);
+    document.getElementById('loading-area').style.display='none';
+    // Marca receitas como geradas por IA
+    resultado._ia = true;
+    renderResults(resultado, tipo);
+  }catch(err){
+    clearInterval(interval);
+    document.getElementById('loading-area').style.display='none';
+    document.getElementById('form-area').style.display='block';
+    document.getElementById('error-area').innerHTML=`<div class="error-box">${err.message||'Erro ao gerar receitas. Tente novamente.'}</div>`;
+  }
+}
 </script>
 <script src="/js/api.js?v=2"></script>
 <script>
 // ── Proteção: redireciona para login se não estiver logado ────
 if (!estaLogado()) window.location.href = '/login.html';
+
+// ── Renderiza botão IA conforme o plano do usuário ────────────
+renderBotaoIA();
 
 // ── Renderiza barra de usuário no topo ────────────────────────
 (function(){

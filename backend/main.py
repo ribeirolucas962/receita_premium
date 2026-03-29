@@ -10,13 +10,20 @@ from sqlalchemy.orm import Session
 from pydantic import BaseModel, EmailStr
 from datetime import datetime
 from typing import Optional
-import shutil, os, uuid, stripe, json, re, sqlite3
+import shutil, os, uuid, stripe, json, re, sqlite3, urllib.request, urllib.parse
 from dotenv import load_dotenv
 
 from database import engine, get_db, Base
 import models, auth
 
 load_dotenv()
+
+# ── Claude AI ────────────────────────────────────────────────
+try:
+    import anthropic as _anthropic
+    _ai_client = _anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY", ""))
+except ImportError:
+    _ai_client = None
 stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
 
 # ── Criar tabelas no banco ────────────────────────────────────
@@ -385,6 +392,121 @@ def importar_json(db: Session = Depends(get_db)):
 
     db.commit()
     return {"importadas": importadas}
+
+# ════════════════════════════════════════════════════════════
+# IA — Geração de receitas com Claude
+# ════════════════════════════════════════════════════════════
+class GerarReceitaInput(BaseModel):
+    tipo: str
+    pessoas: str
+    proteinas: list
+    dificuldade: str
+    ambiente: str
+    restricoes: list
+    vinhos: list
+    contexto: str = ""
+
+@app.post("/ia/gerar-receita")
+@limiter.limit("3/minute")
+def gerar_receita_ia(
+    request: Request,
+    dados: GerarReceitaInput,
+    usuario = Depends(auth.requer_plano(["mensal", "anual"]))
+):
+    if not _ai_client:
+        raise HTTPException(503, "Módulo de IA não instalado no servidor")
+
+    api_key = os.getenv("ANTHROPIC_API_KEY", "")
+    if not api_key or api_key == "coloque_sua_chave_anthropic_aqui":
+        raise HTTPException(503, "Serviço de IA não configurado")
+
+    proteinas_str  = ", ".join(dados.proteinas)  if dados.proteinas  else "qualquer proteína"
+    restricoes_str = ", ".join(dados.restricoes) if dados.restricoes else "nenhuma"
+    vinhos_str     = ", ".join(dados.vinhos)     if dados.vinhos     else "qualquer vinho"
+
+    prompt = f"""Você é um chef executivo de alta gastronomia. Crie 3 receitas premium sofisticadas.
+
+Tipo de encontro: {dados.tipo}
+Número de pessoas: {dados.pessoas}
+Proteínas preferidas: {proteinas_str}
+Nível de dificuldade: {dados.dificuldade}
+Ambiente e clima: {dados.ambiente}
+Restrições alimentares: {restricoes_str}
+Preferências de vinho: {vinhos_str}
+Contexto adicional: {dados.contexto or "nenhum"}
+
+Retorne APENAS um JSON válido (sem markdown, sem texto fora do JSON) com esta estrutura exata:
+{{
+  "intro": "texto introdutório elegante de 2-3 frases",
+  "nota_sommelier": "nota do sommelier sobre os vinhos selecionados",
+  "receitas": [
+    {{
+      "numero": 1,
+      "nome": "Nome Elegante da Receita",
+      "foto_busca": "realistic gourmet dish photo search term in english (ex: seared sea bass champagne sauce)",
+      "categoria": "Peixe",
+      "clima": "como esta receita combina com o encontro (1 frase)",
+      "descricao": "descrição sofisticada da receita em 2-3 frases",
+      "tempo": "XX min",
+      "dificuldade": "Alta",
+      "porcoes": "2 pessoas",
+      "ingredientes": ["Ingrediente Premium — quantidade"],
+      "tecnica": ["Passo técnico essencial"],
+      "vinhos": ["Vinho Sugerido 1", "Vinho Sugerido 2"],
+      "mesa": [{{"nome": "Item da Mesa", "desc": "Sugestão de apresentação"}}],
+      "dica_chef": "dica técnica exclusiva e surpreendente do chef"
+    }}
+  ]
+}}"""
+
+    try:
+        msg = _ai_client.messages.create(
+            model="claude-haiku-4-5-20251001",
+            max_tokens=3000,
+            messages=[{"role": "user", "content": prompt}]
+        )
+        texto = msg.content[0].text.strip()
+        # Remove blocos markdown se presentes
+        if "```" in texto:
+            m = re.search(r'```(?:json)?\s*([\s\S]*?)```', texto)
+            if m:
+                texto = m.group(1).strip()
+        # Extrai apenas o objeto JSON principal
+        inicio = texto.find('{')
+        fim    = texto.rfind('}')
+        if inicio != -1 and fim != -1:
+            texto = texto[inicio:fim+1]
+        # Corrige vírgulas extras antes de } ou ] (erro comum de LLMs)
+        texto = re.sub(r',\s*([}\]])', r'\1', texto)
+        return json.loads(texto)
+    except json.JSONDecodeError as e:
+        raise HTTPException(500, f"Erro ao processar resposta da IA. Tente novamente. Detalhe: {str(e)}")
+    except Exception as e:
+        raise HTTPException(500, f"Erro no serviço de IA: {str(e)}")
+
+
+# ════════════════════════════════════════════════════════════
+# FOTOS — Unsplash
+# ════════════════════════════════════════════════════════════
+@app.get("/ia/foto")
+@limiter.limit("30/minute")
+def buscar_foto(request: Request, q: str, usuario = Depends(auth.usuario_atual)):
+    access_key = os.getenv("UNSPLASH_ACCESS_KEY", "")
+    if not access_key:
+        return {"url": None}
+
+    params = urllib.parse.urlencode({"query": q, "per_page": 1, "orientation": "landscape"})
+    url = f"https://api.unsplash.com/search/photos?{params}"
+    req = urllib.request.Request(url, headers={"Authorization": f"Client-ID {access_key}"})
+    try:
+        with urllib.request.urlopen(req, timeout=5) as resp:
+            data = json.loads(resp.read())
+            if data.get("results"):
+                return {"url": data["results"][0]["urls"]["regular"]}
+    except Exception:
+        pass
+    return {"url": None}
+
 
 if __name__ == "__main__":
     import uvicorn

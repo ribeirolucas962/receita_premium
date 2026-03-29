@@ -11,3 +11,4 @@ python-dotenv==1.0.0
 slowapi==0.1.9
 stripe==14.4.1
 pydantic[email]
+anthropic==0.49.0
