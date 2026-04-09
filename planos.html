@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Planos — Chef IA Premium</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gold:#C9A84C;--gold-light:#E8C87A;--gold-dim:rgba(201,168,76,.15);
+  --dark:#0E0D0B;--dark2:#161410;--dark3:#1E1C18;--dark4:#272420;
+  --border:rgba(201,168,76,.18);--border2:rgba(255,255,255,.07);
+  --text:#F0EDE6;--text2:#B8B2A4;--text3:#7A7468;
+  --green:#5ECBA1;--red:#E89090;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'Inter',system-ui,sans-serif;
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--sans);background:var(--dark);color:var(--text);
+  min-height:100vh;
+  background-image:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(201,168,76,.08) 0%,transparent 70%);
+}
+.app{max-width:1080px;margin:0 auto;padding:48px 20px 80px}
+
+/* ── Topbar ── */
+.topbar{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:56px;
+}
+.btn-back{
+  font-size:11px;color:var(--text3);background:transparent;
+  border:1px solid var(--border2);border-radius:8px;
+  padding:7px 16px;cursor:pointer;font-family:var(--sans);
+  letter-spacing:.08em;text-transform:uppercase;transition:all .2s;
+  text-decoration:none;display:inline-block;
+}
+.btn-back:hover{border-color:var(--border);color:var(--text2)}
+.user-info{display:flex;align-items:center;gap:12px}
+.user-name{font-size:13px;color:var(--text2)}
+.plan-chip{
+  font-size:10px;padding:3px 10px;border-radius:20px;
+  letter-spacing:.08em;text-transform:uppercase;font-weight:500;
+}
+.plan-chip.free{
+  background:rgba(255,255,255,.06);border:1px solid var(--border2);color:var(--text3);
+}
+.plan-chip.premium{
+  background:var(--gold-dim);border:1px solid rgba(201,168,76,.35);color:var(--gold-light);
+}
+.logout-link{
+  font-size:11px;color:var(--text3);background:none;border:none;cursor:pointer;
+  font-family:var(--sans);letter-spacing:.06em;text-transform:uppercase;
+  transition:color .2s;padding:0;
+}
+.logout-link:hover{color:var(--red)}
+
+/* ── Hero ── */
+.hero{text-align:center;margin-bottom:56px}
+.hero-eyebrow{
+  font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:16px;font-weight:400;
+}
+.hero-title{
+  font-family:var(--serif);font-size:52px;font-weight:400;
+  color:var(--gold-light);line-height:1.1;letter-spacing:.03em;
+  margin-bottom:12px;
+}
+.hero-sub{
+  font-size:15px;color:var(--text3);font-weight:300;
+  letter-spacing:.02em;line-height:1.7;max-width:480px;margin:0 auto;
+}
+
+/* ── Banner sucesso/cancelado ── */
+.banner{
+  border-radius:14px;padding:16px 24px;margin-bottom:32px;
+  font-size:14px;line-height:1.6;display:none;
+  animation:fadeIn .4s ease;
+}
+.banner.sucesso{
+  background:rgba(94,203,161,.1);border:1px solid rgba(94,203,161,.25);color:var(--green);
+}
+.banner.cancelado{
+  background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);color:var(--gold-light);
+}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── Grid de planos ── */
+.plans-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:20px;
+  align-items:start;
+}
+
+/* ── Card de plano ── */
+.plan-card{
+  background:var(--dark2);border:1px solid var(--border2);
+  border-radius:20px;padding:32px 28px;position:relative;
+  transition:border-color .3s,transform .3s;
+}
+.plan-card:hover{
+  border-color:rgba(201,168,76,.3);
+  transform:translateY(-3px);
+}
+.plan-card.destaque{
+  border-color:var(--border);
+  background:linear-gradient(160deg,var(--dark2),rgba(201,168,76,.04));
+  box-shadow:0 0 60px rgba(201,168,76,.08),0 24px 60px rgba(0,0,0,.4);
+  transform:translateY(-8px);
+}
+.plan-card.destaque:hover{transform:translateY(-12px)}
+.plan-card.atual{border-color:rgba(94,203,161,.3)}
+
+/* Badge popular */
+.badge-popular{
+  position:absolute;top:-14px;left:50%;transform:translateX(-50%);
+  background:linear-gradient(90deg,var(--gold),var(--gold-light));
+  color:var(--dark);font-size:10px;font-weight:500;
+  letter-spacing:.12em;text-transform:uppercase;
+  padding:5px 16px;border-radius:20px;white-space:nowrap;
+}
+.badge-atual{
+  position:absolute;top:-14px;left:50%;transform:translateX(-50%);
+  background:rgba(94,203,161,.15);border:1px solid rgba(94,203,161,.3);
+  color:var(--green);font-size:10px;font-weight:500;
+  letter-spacing:.1em;text-transform:uppercase;
+  padding:5px 16px;border-radius:20px;white-space:nowrap;
+}
+
+/* Cabeçalho do card */
+.plan-name{
+  font-family:var(--serif);font-size:26px;font-weight:400;
+  color:var(--text);margin-bottom:6px;letter-spacing:.03em;
+}
+.plan-price{
+  font-family:var(--serif);font-size:42px;font-weight:400;
+  color:var(--gold-light);line-height:1;margin-bottom:4px;
+  letter-spacing:-.01em;
+}
+.plan-price sup{font-size:20px;vertical-align:super;line-height:0;color:var(--gold)}
+.plan-price-period{font-size:13px;color:var(--text3);margin-bottom:6px;font-weight:300}
+.plan-price-free{
+  font-family:var(--serif);font-size:36px;color:var(--text2);
+  font-weight:300;margin-bottom:4px;
+}
+.plan-economy{
+  font-size:11px;color:var(--green);font-weight:400;
+  letter-spacing:.04em;margin-bottom:20px;
+  background:rgba(94,203,161,.08);border:1px solid rgba(94,203,161,.15);
+  border-radius:20px;display:inline-block;padding:3px 10px;
+}
+.plan-divider{
+  height:1px;background:var(--border2);margin:20px 0;
+}
+
+/* Features */
+.features{list-style:none;margin-bottom:28px}
+.features li{
+  font-size:13px;color:var(--text2);padding:7px 0;
+  display:flex;align-items:flex-start;gap:9px;line-height:1.5;
+}
+.features li.ok{color:var(--text2)}
+.features li.nok{color:var(--text3);opacity:.6}
+.feat-icon{
+  font-size:12px;margin-top:1px;flex-shrink:0;width:16px;text-align:center;
+}
+.feat-icon.ok{color:var(--green)}
+.feat-icon.nok{color:var(--text3)}
+
+/* Botões */
+.btn-plan{
+  width:100%;padding:14px;border-radius:12px;
+  font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;
+  cursor:pointer;font-family:var(--sans);transition:all .25s;
+  border:none;position:relative;overflow:hidden;
+}
+.btn-plan:disabled{opacity:.5;cursor:not-allowed}
+.btn-plan.primary{
+  background:linear-gradient(135deg,var(--gold),var(--gold-light));
+  color:var(--dark);
+}
+.btn-plan.primary:hover:not(:disabled){
+  box-shadow:0 4px 24px rgba(201,168,76,.35);
+  filter:brightness(1.06);
+}
+.btn-plan.secondary{
+  background:var(--dark3);border:1px solid var(--border);
+  color:var(--gold);
+}
+.btn-plan.secondary:hover:not(:disabled){
+  background:var(--gold-dim);border-color:rgba(201,168,76,.4);
+}
+.btn-plan.ghost{
+  background:transparent;border:1px solid var(--border2);
+  color:var(--text3);cursor:default;
+}
+
+/* Loading spinner no botão */
+.btn-spinner{
+  display:inline-block;width:14px;height:14px;
+  border:2px solid rgba(0,0,0,.2);border-top-color:var(--dark);
+  border-radius:50%;animation:spin .7s linear infinite;
+  margin-right:8px;vertical-align:middle;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── Rodapé info ── */
+.plans-footer{
+  text-align:center;margin-top:40px;
+}
+.plans-footer p{
+  font-size:12px;color:var(--text3);line-height:1.8;
+}
+.plans-footer a{color:var(--gold);text-decoration:none}
+.plans-footer a:hover{color:var(--gold-light)}
+
+/* ── FAQ ── */
+.faq{max-width:640px;margin:64px auto 0}
+.faq-title{
+  font-family:var(--serif);font-size:32px;font-weight:400;
+  color:var(--text2);text-align:center;margin-bottom:32px;
+  letter-spacing:.04em;
+}
+.faq-item{
+  border-bottom:1px solid var(--border2);
+  padding:20px 0;
+}
+.faq-q{
+  font-size:14px;color:var(--text);cursor:pointer;
+  display:flex;justify-content:space-between;align-items:center;
+  user-select:none;
+}
+.faq-q::after{
+  content:'＋';font-size:16px;color:var(--gold);transition:transform .3s;flex-shrink:0;margin-left:16px;
+}
+.faq-item.open .faq-q::after{transform:rotate(45deg)}
+.faq-a{
+  font-size:13px;color:var(--text3);line-height:1.75;
+  max-height:0;overflow:hidden;transition:max-height .4s ease, padding .3s;
+  padding-top:0;
+}
+.faq-item.open .faq-a{max-height:200px;padding-top:12px}
+
+/* ── Responsive ── */
+@media(max-width:800px){
+  .plans-grid{grid-template-columns:1fr;max-width:400px;margin:0 auto}
+  .plan-card.destaque{transform:none}
+  .plan-card.destaque:hover{transform:translateY(-3px)}
+  .hero-title{font-size:38px}
+}
+@media(max-width:500px){
+  .hero-title{font-size:32px}
+  .topbar{flex-direction:column;align-items:flex-start;gap:14px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <a class="btn-back" href="http://localhost:8000/">← Voltar</a>
+    <div class="user-info" id="user-info" style="display:none">
+      <span class="user-name" id="user-name"></span>
+      <span class="plan-chip" id="user-chip"></span>
+      <button class="logout-link" onclick="fazerLogout()">Sair</button>
+    </div>
+  </div>
+
+  <!-- Banners -->
+  <div class="banner sucesso" id="banner-sucesso">
+    <strong>Assinatura confirmada!</strong> Bem-vindo ao Chef IA Premium.
+    Seu plano foi ativado e você já tem acesso a todas as receitas exclusivas.
+  </div>
+  <div class="banner cancelado" id="banner-cancelado">
+    Checkout cancelado. Sem problemas — você pode assinar quando quiser.
+  </div>
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-eyebrow">Alta Gastronomia</div>
+    <h1 class="hero-title">Escolha seu plano</h1>
+    <p class="hero-sub">
+      Acesse receitas premium de alta gastronomia, harmonizações de vinho
+      e geração de menus personalizados com inteligência artificial.
+    </p>
+  </div>
+
+  <!-- Cards de planos -->
+  <div class="plans-grid" id="plans-grid">
+
+    <!-- Gratuito -->
+    <div class="plan-card" id="card-gratuito">
+      <div class="plan-price-free">Grátis</div>
+      <div class="plan-price-period">para sempre</div>
+      <div class="plan-name">Gratuito</div>
+      <div class="plan-divider"></div>
+      <ul class="features">
+        <li class="ok"><span class="feat-icon ok">✓</span>Acesso a receitas básicas</li>
+        <li class="ok"><span class="feat-icon ok">✓</span>Busca de ingredientes</li>
+        <li class="nok"><span class="feat-icon nok">✗</span>Receitas premium de alta gastronomia</li>
+        <li class="nok"><span class="feat-icon nok">✗</span>Chef IA — menus personalizados</li>
+        <li class="nok"><span class="feat-icon nok">✗</span>Harmonização de vinhos</li>
+        <li class="nok"><span class="feat-icon nok">✗</span>Fotos profissionais</li>
+      </ul>
+      <button class="btn-plan ghost" disabled id="btn-gratuito">Plano atual</button>
+    </div>
+
+    <!-- Anual — destaque -->
+    <div class="plan-card destaque" id="card-anual">
+      <div class="badge-popular" id="badge-anual">Mais popular</div>
+      <div class="plan-price"><sup>R$</sup>249<span style="font-size:22px">,00</span></div>
+      <div class="plan-price-period">por ano &nbsp;·&nbsp; R$ 20,75/mês</div>
+      <div class="plan-name">Anual</div>
+      <div class="plan-economy">Economize 30% vs mensal</div>
+      <div class="plan-divider"></div>
+      <ul class="features">
+        <li class="ok"><span class="feat-icon ok">✓</span>Tudo do plano Gratuito</li>
+        <li class="ok"><span class="feat-icon ok">✓</span>+40 receitas premium de alta gastronomia</li>
+        <li class="ok"><span class="feat-icon ok">✓</span>Chef IA — 3 gerações por minuto</li>
+        <li class="ok"><span class="feat-icon ok">✓</span>Harmonização de vinhos por sommelier</li>
+        <li class="ok"><span class="feat-icon ok">✓</span>Fotos profissionais de cada prato</li>
+        <li class="ok"><span class="feat-icon ok">✓</span>Acesso antecipado a novidades</li>
+      </ul>
+      <button class="btn-plan primary" id="btn-anual" onclick="assinar('anual', this)">
+        Assinar agora
+      </button>
+    </div>
+
+    <!-- Mensal -->
+    <div class="plan-card" id="card-mensal">
+      <div class="plan-price"><sup>R$</sup>29<span style="font-size:22px">,90</span></div>
+      <div class="plan-price-period">por mês</div>
+      <div class="plan-name">Mensal</div>
+      <div class="plan-divider"></div>
+      <ul class="features">
+        <li class="ok"><span class="feat-icon ok">✓</span>Tudo do plano Gratuito</li>
+        <li class="ok"><span class="feat-icon ok">✓</span>+40 receitas premium de alta gastronomia</li>
+        <li class="ok"><span class="feat-icon ok">✓</span>Chef IA — 3 gerações por minuto</li>
+        <li class="ok"><span class="feat-icon ok">✓</span>Harmonização de vinhos por sommelier</li>
+        <li class="ok"><span class="feat-icon ok">✓</span>Fotos profissionais de cada prato</li>
+        <li class="nok"><span class="feat-icon nok">–</span>Acesso antecipado a novidades</li>
+      </ul>
+      <button class="btn-plan secondary" id="btn-mensal" onclick="assinar('mensal', this)">
+        Assinar mensal
+      </button>
+    </div>
+
+  </div>
+
+  <!-- Rodapé -->
+  <div class="plans-footer">
+    <p>
+      Pagamento seguro via <strong style="color:var(--text2)">Stripe</strong> &nbsp;·&nbsp;
+      Cancele a qualquer momento &nbsp;·&nbsp;
+      Sem fidelidade
+    </p>
+    <p style="margin-top:8px">
+      Dúvidas? <a href="http://localhost:8000/">Voltar ao início</a>
+    </p>
+  </div>
+
+  <!-- FAQ -->
+  <div class="faq">
+    <div class="faq-title">Perguntas frequentes</div>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Posso cancelar quando quiser?</div>
+      <div class="faq-a">Sim. Você pode cancelar sua assinatura a qualquer momento direto pelo painel. Seu acesso permanece ativo até o fim do período já pago.</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Como funciona a cobrança anual?</div>
+      <div class="faq-a">O plano anual é cobrado uma única vez no valor de R$ 249,00. É equivalente a R$ 20,75 por mês, com 30% de desconto em relação ao plano mensal.</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Meus dados de pagamento ficam salvos?</div>
+      <div class="faq-a">Não armazenamos dados de cartão. O pagamento é processado 100% pelo Stripe, empresa líder em segurança de pagamentos online.</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">O que é o Chef IA?</div>
+      <div class="faq-a">O Chef IA usa inteligência artificial para criar menus personalizados com base no tipo de encontro, proteínas preferidas, restrições alimentares e harmonização de vinhos. Exclusivo para assinantes.</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+  ? 'http://localhost:8000'
+  : 'https://receita-premium.onrender.com';
+
+const TOKEN_KEY = 'chef_premium_token';
+const USER_KEY  = 'chef_premium_user';
+
+function getToken() { return localStorage.getItem(TOKEN_KEY) || sessionStorage.getItem(TOKEN_KEY); }
+function getUser()  { try { return JSON.parse(localStorage.getItem(USER_KEY)); } catch { return null; } }
+function removeToken() {
+  localStorage.removeItem(TOKEN_KEY);
+  sessionStorage.removeItem(TOKEN_KEY);
+  localStorage.removeItem(USER_KEY);
+}
+
+async function fazerLogout() {
+  removeToken();
+  window.location.href = 'http://localhost:8000/login.html';
+}
+
+// ── Detecta abertura via file:// ────────────────────────────
+if (location.protocol === 'file:') {
+  document.body.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100vh;padding:24px;text-align:center">
+    <div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:28px;color:#C9A84C;margin-bottom:16px">Chef IA Premium</div>
+      <p style="color:#7A7468;font-size:14px;line-height:1.8">
+        Acesse pelo servidor:<br>
+        <a href="http://localhost:8000/planos.html" style="color:#C9A84C">http://localhost:8000/planos.html</a>
+      </p>
+    </div>
+  </div>`;
+}
+
+// ── Lê parâmetros da URL ────────────────────────────────────
+const params = new URLSearchParams(location.search);
+if (params.get('sucesso') === '1') {
+  document.getElementById('banner-sucesso').style.display = 'block';
+  // Atualiza plano no localStorage via API
+  setTimeout(async () => {
+    try {
+      const token = getToken();
+      if (token) {
+        const res = await fetch(`${API_BASE}/auth/perfil`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          localStorage.setItem(USER_KEY, JSON.stringify({ nome: data.nome, plano: data.plano, email: data.email }));
+          renderPlanoAtual(data.plano);
+        }
+      }
+    } catch {}
+  }, 1000);
+}
+if (params.get('cancelado') === '1') {
+  document.getElementById('banner-cancelado').style.display = 'block';
+}
+
+// ── Renderiza usuário no topo ────────────────────────────────
+function renderPlanoAtual(plano) {
+  // Reset todos os cards
+  ['gratuito','mensal','anual'].forEach(p => {
+    const card = document.getElementById(`card-${p}`);
+    const btn  = document.getElementById(`btn-${p}`);
+    const badge = document.getElementById(`badge-${p}`);
+    card.classList.remove('atual');
+
+    if (p === 'gratuito') {
+      btn.textContent = 'Plano atual';
+      btn.disabled = true;
+      btn.className = 'btn-plan ghost';
+    } else if (p === 'anual') {
+      if (badge) badge.textContent = 'Mais popular';
+      btn.textContent = 'Assinar agora';
+      btn.disabled = false;
+      btn.className = 'btn-plan primary';
+      btn.onclick = () => assinar('anual', btn);
+    } else {
+      btn.textContent = 'Assinar mensal';
+      btn.disabled = false;
+      btn.className = 'btn-plan secondary';
+      btn.onclick = () => assinar('mensal', btn);
+    }
+  });
+
+  // Marca plano atual
+  if (plano === 'mensal' || plano === 'anual') {
+    const card = document.getElementById(`card-${plano}`);
+    const btn  = document.getElementById(`btn-${plano}`);
+    const badge = document.getElementById(`badge-${plano}`);
+    card.classList.add('atual');
+    if (badge) { badge.textContent = 'Plano atual'; }
+    else {
+      const b = document.createElement('div');
+      b.className = 'badge-atual';
+      b.id = `badge-${plano}`;
+      b.textContent = 'Plano atual';
+      card.insertBefore(b, card.firstChild);
+    }
+    btn.textContent = 'Plano ativo';
+    btn.disabled = true;
+    btn.className = 'btn-plan ghost';
+  }
+  if (plano === 'gratuito') {
+    const card = document.getElementById('card-gratuito');
+    card.classList.add('atual');
+  }
+}
+
+// ── Inicializa estado do usuário ────────────────────────────
+function init() {
+  const user = getUser();
+  if (user) {
+    const infoEl = document.getElementById('user-info');
+    infoEl.style.display = 'flex';
+    document.getElementById('user-name').textContent = user.nome.split(' ')[0];
+    const chip = document.getElementById('user-chip');
+    if (user.plano === 'gratuito') {
+      chip.textContent = 'Gratuito';
+      chip.className = 'plan-chip free';
+    } else {
+      chip.textContent = user.plano === 'anual' ? 'Anual' : 'Premium';
+      chip.className = 'plan-chip premium';
+    }
+    renderPlanoAtual(user.plano);
+  }
+}
+
+// ── Checkout Stripe ─────────────────────────────────────────
+async function assinar(plano, btnEl) {
+  if (!getToken()) {
+    window.location.href = 'http://localhost:8000/login.html';
+    return;
+  }
+
+  // Mostra loading
+  const textoOriginal = btnEl.textContent;
+  btnEl.disabled = true;
+  btnEl.innerHTML = `<span class="btn-spinner"></span>Processando...`;
+
+  try {
+    const res = await fetch(`${API_BASE}/assinaturas/checkout`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${getToken()}`
+      },
+      body: JSON.stringify({ plano })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.detail || `Erro ${res.status}`);
+    }
+
+    // Redireciona para o Stripe Checkout
+    if (data.url) {
+      window.location.href = data.url;
+    } else {
+      throw new Error('URL de checkout não retornada');
+    }
+
+  } catch (err) {
+    btnEl.disabled = false;
+    btnEl.textContent = textoOriginal;
+
+    const msg = err.message || 'Erro ao iniciar checkout';
+    // Mostra erro inline abaixo do botão
+    let errEl = btnEl.parentElement.querySelector('.btn-error');
+    if (!errEl) {
+      errEl = document.createElement('div');
+      errEl.className = 'btn-error';
+      errEl.style.cssText = 'font-size:12px;color:#E89090;margin-top:10px;text-align:center;';
+      btnEl.insertAdjacentElement('afterend', errEl);
+    }
+    errEl.textContent = msg;
+    setTimeout(() => { if (errEl) errEl.remove(); }, 5000);
+  }
+}
+
+// ── FAQ ──────────────────────────────────────────────────────
+function toggleFaq(el) {
+  const isOpen = el.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+  if (!isOpen) el.classList.add('open');
+}
+
+init();
+</script>
+</body>
+</html>

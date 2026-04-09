@@ -170,15 +170,11 @@ receita_premium/
 
 ---
 
-### FASE 3 — Fotos das Receitas
-- [ ] Painel admin para fazer upload de fotos
-- [ ] Exibir foto no card de cada receita
-- [ ] Foto de destaque na página da receita
-- [ ] Otimizar imagens automaticamente (thumbnail)
-
-**Arquivos a criar:**
-- `admin.html` — painel de gestão
-- Rota de resize automático no backend
+### FASE 3 — Fotos das Receitas (CONCLUÍDA)
+- [x] Painel admin para fazer upload de fotos (`admin.html`)
+- [x] Exibir foto no card de cada receita
+- [x] Foto de destaque na página da receita
+- [x] Otimizar imagens automaticamente (Pillow — resize 1200x900, JPEG 85%)
 
 ---
 

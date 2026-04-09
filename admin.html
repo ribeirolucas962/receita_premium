@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Fotos das Receitas | Chef IA Premium</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gold:#C9A84C;
+  --gold-light:#E8C87A;
+  --gold-dim:rgba(201,168,76,.15);
+  --dark:#0E0D0B;
+  --dark2:#161410;
+  --dark3:#1E1C18;
+  --dark4:#272420;
+  --border:rgba(201,168,76,.18);
+  --border2:rgba(255,255,255,.07);
+  --text:#F0EDE6;
+  --text2:#B8B2A4;
+  --text3:#7A7468;
+  --green:#5ECBA1;
+  --red:#E89090;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'Inter',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--sans);
+  background:var(--dark);
+  color:var(--text);
+  min-height:100vh;
+  background-image:radial-gradient(ellipse 80% 50% at 50% -10%, rgba(201,168,76,.07) 0%, transparent 70%);
+}
+
+/* ── Layout ── */
+.app{max-width:960px;margin:0 auto;padding:48px 20px 80px}
+
+/* ── Header ── */
+.page-header{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:40px;padding-bottom:24px;
+  border-bottom:1px solid var(--border);
+}
+.page-title{
+  font-family:var(--serif);font-size:32px;font-weight:400;
+  color:var(--gold-light);letter-spacing:.04em;
+}
+.page-subtitle{font-size:12px;color:var(--text3);margin-top:4px;letter-spacing:.06em}
+.top-actions{display:flex;align-items:center;gap:12px}
+.btn-back{
+  font-size:11px;color:var(--text3);background:transparent;
+  border:1px solid var(--border2);border-radius:8px;
+  padding:7px 14px;cursor:pointer;font-family:var(--sans);
+  letter-spacing:.08em;text-transform:uppercase;transition:all .2s;
+  text-decoration:none;display:inline-block;
+}
+.btn-back:hover{border-color:var(--border);color:var(--text2)}
+.logout-btn{
+  font-size:10px;color:var(--text3);background:transparent;border:none;
+  cursor:pointer;font-family:var(--sans);letter-spacing:.08em;
+  text-transform:uppercase;transition:color .2s;padding:0;
+}
+.logout-btn:hover{color:var(--red)}
+
+/* ── Stats bar ── */
+.stats-bar{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:12px;
+  margin-bottom:32px;
+}
+.stat-card{
+  background:var(--dark2);border:1px solid var(--border);
+  border-radius:14px;padding:18px 20px;
+}
+.stat-card-label{font-size:9px;color:var(--gold);text-transform:uppercase;letter-spacing:.16em;margin-bottom:6px}
+.stat-card-value{font-family:var(--serif);font-size:28px;color:var(--text);font-weight:400}
+.stat-card-sub{font-size:11px;color:var(--text3);margin-top:4px}
+
+/* ── Grid de receitas ── */
+.recipes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+
+/* ── Card de receita ── */
+.recipe-card{
+  background:var(--dark2);border:1px solid var(--border);
+  border-radius:16px;overflow:hidden;
+  transition:border-color .2s;position:relative;
+}
+.recipe-card:hover{border-color:rgba(201,168,76,.35)}
+.recipe-card.has-photo{border-color:rgba(94,203,161,.2)}
+
+/* ── Foto preview ── */
+.foto-preview{
+  width:100%;height:180px;background:var(--dark3);
+  position:relative;overflow:hidden;
+  border-bottom:1px solid var(--border2);
+}
+.foto-preview img{
+  width:100%;height:100%;object-fit:cover;
+  display:block;transition:opacity .3s;
+}
+.foto-placeholder{
+  width:100%;height:100%;
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:8px;
+  background:linear-gradient(135deg,rgba(201,168,76,.05),transparent);
+}
+.foto-placeholder-icon{font-size:28px;opacity:.25}
+.foto-placeholder-text{font-size:10px;color:var(--text3);letter-spacing:.1em;text-transform:uppercase}
+
+/* ── Status badge ── */
+.status-badge{
+  position:absolute;top:10px;right:10px;
+  font-size:9px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;
+  padding:3px 9px;border-radius:20px;
+}
+.status-ok{background:rgba(94,203,161,.15);border:1px solid rgba(94,203,161,.3);color:var(--green)}
+.status-missing{background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.2);color:var(--gold)}
+
+/* ── Card body ── */
+.card-body{padding:16px}
+.card-name{
+  font-family:var(--serif);font-size:16px;font-weight:400;
+  color:var(--text);margin-bottom:6px;line-height:1.3;
+}
+.card-meta{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.card-tag{
+  font-size:9px;padding:3px 8px;border-radius:20px;
+  border:1px solid var(--border2);color:var(--text3);
+  background:var(--dark3);letter-spacing:.06em;
+}
+
+/* ── Upload area ── */
+.upload-area{
+  border:1px dashed rgba(201,168,76,.25);border-radius:10px;
+  padding:12px;text-align:center;cursor:pointer;
+  transition:all .2s;background:transparent;
+  position:relative;
+}
+.upload-area:hover,.upload-area.drag-over{
+  border-color:rgba(201,168,76,.5);
+  background:rgba(201,168,76,.04);
+}
+.upload-area input[type="file"]{
+  position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;
+}
+.upload-text{font-size:11px;color:var(--text3);letter-spacing:.06em}
+.upload-text strong{color:var(--gold);font-weight:500}
+.upload-text small{display:block;margin-top:3px;font-size:10px;color:var(--text3);opacity:.7}
+
+/* ── Progress ── */
+.upload-progress{
+  margin-top:10px;display:none;
+}
+.progress-bar-wrap{
+  height:3px;background:var(--dark3);border-radius:3px;overflow:hidden;
+}
+.progress-bar{
+  height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-light));
+  border-radius:3px;transition:width .3s;width:0;
+}
+.progress-text{font-size:10px;color:var(--text3);margin-top:6px;text-align:center}
+
+/* ── Success flash ── */
+.upload-success{
+  margin-top:8px;display:none;
+  font-size:11px;color:var(--green);text-align:center;
+  padding:6px;border-radius:8px;
+  background:rgba(94,203,161,.08);border:1px solid rgba(94,203,161,.2);
+}
+.upload-error{
+  margin-top:8px;display:none;
+  font-size:11px;color:var(--red);text-align:center;
+  padding:6px;border-radius:8px;
+  background:rgba(232,144,138,.08);border:1px solid rgba(232,144,138,.2);
+}
+
+/* ── Loading geral ── */
+.loading-state{
+  text-align:center;padding:80px 20px;
+}
+.loader{
+  width:40px;height:40px;border:1px solid rgba(201,168,76,.15);
+  border-top-color:var(--gold);border-radius:50%;
+  animation:spin 1.2s linear infinite;margin:0 auto 20px;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{
+  font-family:var(--serif);font-size:20px;font-weight:300;
+  color:var(--text2);letter-spacing:.04em;
+}
+
+/* ── Filtros ── */
+.filters{
+  display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;
+  align-items:center;
+}
+.filter-btn{
+  font-size:10px;padding:6px 14px;border-radius:20px;
+  border:1px solid var(--border2);background:transparent;
+  color:var(--text3);cursor:pointer;font-family:var(--sans);
+  letter-spacing:.08em;text-transform:uppercase;transition:all .2s;
+}
+.filter-btn.active{
+  background:var(--gold-dim);border-color:rgba(201,168,76,.4);
+  color:var(--gold-light);
+}
+.filter-btn:hover{border-color:var(--border);color:var(--text2)}
+
+/* ── Empty ── */
+.empty-state{
+  text-align:center;padding:60px 20px;
+  border:1px dashed var(--border2);border-radius:16px;
+}
+.empty-icon{font-size:32px;opacity:.25;margin-bottom:14px}
+.empty-title{font-family:var(--serif);font-size:20px;color:var(--text2);margin-bottom:8px}
+.empty-sub{font-size:13px;color:var(--text3)}
+
+/* ── Error box ── */
+.error-box{
+  background:rgba(180,40,40,.12);border:1px solid rgba(200,80,80,.25);
+  border-radius:12px;padding:16px;font-size:13px;color:var(--red);
+  margin-bottom:24px;line-height:1.65;
+}
+
+/* ── Responsive ── */
+@media(max-width:600px){
+  .stats-bar{grid-template-columns:1fr 1fr}
+  .page-header{flex-direction:column;align-items:flex-start;gap:14px}
+  .recipes-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <div class="page-title">Gerenciar Fotos</div>
+      <div class="page-subtitle">Painel de administração — Fase 3</div>
+    </div>
+    <div class="top-actions">
+      <a class="btn-back" href="/">← Voltar ao site</a>
+      <button class="logout-btn" onclick="logout()">Sair</button>
+    </div>
+  </div>
+
+  <!-- Área de erro global -->
+  <div id="error-global" style="display:none" class="error-box"></div>
+
+  <!-- Stats -->
+  <div class="stats-bar" id="stats-bar" style="display:none">
+    <div class="stat-card">
+      <div class="stat-card-label">Total de Receitas</div>
+      <div class="stat-card-value" id="stat-total">—</div>
+      <div class="stat-card-sub">no banco de dados</div>
+    </div>
+    <div class="stat-card" style="border-color:rgba(94,203,161,.2)">
+      <div class="stat-card-label">Com Foto</div>
+      <div class="stat-card-value" id="stat-com-foto" style="color:var(--green)">—</div>
+      <div class="stat-card-sub">fotos cadastradas</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-label">Sem Foto</div>
+      <div class="stat-card-value" id="stat-sem-foto" style="color:var(--gold)">—</div>
+      <div class="stat-card-sub">aguardando upload</div>
+    </div>
+  </div>
+
+  <!-- Filtros -->
+  <div class="filters" id="filters" style="display:none">
+    <button class="filter-btn active" onclick="filtrar('todos', this)">Todos</button>
+    <button class="filter-btn" onclick="filtrar('sem-foto', this)">Sem foto</button>
+    <button class="filter-btn" onclick="filtrar('com-foto', this)">Com foto</button>
+  </div>
+
+  <!-- Conteúdo principal -->
+  <div id="main-content">
+    <div class="loading-state">
+      <div class="loader"></div>
+      <div class="loading-text">Carregando receitas...</div>
+    </div>
+  </div>
+
+</div>
+
+<script src="/js/api.js?v=2"></script>
+<script>
+// ── Proteção: redireciona se não logado ────────────────────────
+if (!estaLogado()) window.location.href = '/login.html';
+
+let todasReceitas = [];
+
+// ── Carrega receitas ao iniciar ────────────────────────────────
+async function init() {
+  try {
+    todasReceitas = await listarReceitas();
+    atualizarStats();
+    renderReceitas(todasReceitas);
+    document.getElementById('stats-bar').style.display = 'grid';
+    document.getElementById('filters').style.display = 'flex';
+  } catch (err) {
+    mostrarErroGlobal('Não foi possível carregar as receitas. Verifique se o servidor está rodando.');
+  }
+}
+
+function atualizarStats() {
+  const comFoto = todasReceitas.filter(r => r.foto_url).length;
+  document.getElementById('stat-total').textContent = todasReceitas.length;
+  document.getElementById('stat-com-foto').textContent = comFoto;
+  document.getElementById('stat-sem-foto').textContent = todasReceitas.length - comFoto;
+}
+
+function filtrar(tipo, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  if (tipo === 'com-foto')  renderReceitas(todasReceitas.filter(r => r.foto_url));
+  else if (tipo === 'sem-foto') renderReceitas(todasReceitas.filter(r => !r.foto_url));
+  else renderReceitas(todasReceitas);
+}
+
+function renderReceitas(lista) {
+  const area = document.getElementById('main-content');
+  if (lista.length === 0) {
+    area.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">🍽</div>
+        <div class="empty-title">Nenhuma receita encontrada</div>
+        <div class="empty-sub">Importe as receitas do JSON primeiro em /admin/importar-json</div>
+      </div>`;
+    return;
+  }
+
+  const html = `<div class="recipes-grid">${lista.map(r => cardReceita(r)).join('')}</div>`;
+  area.innerHTML = html;
+}
+
+function cardReceita(r) {
+  const temFoto = !!r.foto_url;
+  const fotoHtml = temFoto
+    ? `<img src="${r.foto_url}" alt="${r.nome}" onerror="this.parentElement.innerHTML=placeholderHtml()">`
+    : `<div class="foto-placeholder">
+        <div class="foto-placeholder-icon">📷</div>
+        <div class="foto-placeholder-text">Sem foto</div>
+       </div>`;
+
+  return `
+  <div class="recipe-card ${temFoto ? 'has-photo' : ''}" id="card-${r.id}">
+    <div class="foto-preview">
+      ${fotoHtml}
+      <span class="status-badge ${temFoto ? 'status-ok' : 'status-missing'}">
+        ${temFoto ? '✓ Com foto' : '+ Sem foto'}
+      </span>
+    </div>
+    <div class="card-body">
+      <div class="card-name">${r.nome}</div>
+      <div class="card-meta">
+        <span class="card-tag">${r.categoria || '—'}</span>
+        <span class="card-tag">${r.dificuldade || '—'}</span>
+        <span class="card-tag">${r.tempo_preparo || '—'}</span>
+      </div>
+      <div class="upload-area" id="drop-${r.id}"
+        ondragover="dragOver(event, ${r.id})"
+        ondragleave="dragLeave(event, ${r.id})"
+        ondrop="dropFoto(event, ${r.id})">
+        <input type="file" accept="image/jpeg,image/png,image/webp"
+          onchange="uploadFoto(${r.id}, this.files[0])">
+        <div class="upload-text">
+          <strong>${temFoto ? 'Substituir foto' : 'Adicionar foto'}</strong>
+          <small>JPEG, PNG ou WebP · máx. 10MB</small>
+        </div>
+      </div>
+      <div class="upload-progress" id="progress-${r.id}">
+        <div class="progress-bar-wrap">
+          <div class="progress-bar" id="bar-${r.id}"></div>
+        </div>
+        <div class="progress-text">Enviando e otimizando...</div>
+      </div>
+      <div class="upload-success" id="success-${r.id}">✓ Foto salva com sucesso!</div>
+      <div class="upload-error" id="error-${r.id}"></div>
+    </div>
+  </div>`;
+}
+
+function placeholderHtml() {
+  return `<div class="foto-placeholder">
+    <div class="foto-placeholder-icon">📷</div>
+    <div class="foto-placeholder-text">Erro ao carregar</div>
+  </div>`;
+}
+
+// ── Drag & Drop ────────────────────────────────────────────────
+function dragOver(e, id) {
+  e.preventDefault();
+  document.getElementById(`drop-${id}`).classList.add('drag-over');
+}
+function dragLeave(e, id) {
+  document.getElementById(`drop-${id}`).classList.remove('drag-over');
+}
+function dropFoto(e, id) {
+  e.preventDefault();
+  document.getElementById(`drop-${id}`).classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file) uploadFoto(id, file);
+}
+
+// ── Upload ─────────────────────────────────────────────────────
+async function uploadFoto(id, file) {
+  if (!file) return;
+
+  const progressEl = document.getElementById(`progress-${id}`);
+  const barEl      = document.getElementById(`bar-${id}`);
+  const successEl  = document.getElementById(`success-${id}`);
+  const errorEl    = document.getElementById(`error-${id}`);
+
+  // Reset estado
+  successEl.style.display = 'none';
+  errorEl.style.display   = 'none';
+  progressEl.style.display = 'block';
+
+  // Anima barra (simulado — fetch não suporta progresso facilmente)
+  let pct = 0;
+  const tick = setInterval(() => {
+    pct = Math.min(pct + 10, 85);
+    barEl.style.width = pct + '%';
+  }, 120);
+
+  try {
+    const form = new FormData();
+    form.append('foto', file);
+
+    const token = getToken();
+    const res = await fetch(`${API_BASE}/receitas/${id}/foto`, {
+      method: 'POST',
+      headers: token ? { 'Authorization': `Bearer ${token}` } : {},
+      body: form
+    });
+
+    clearInterval(tick);
+    barEl.style.width = '100%';
+
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      throw new Error(data.detail || `Erro ${res.status}`);
+    }
+
+    const data = await res.json();
+
+    // Atualiza receita local
+    const idx = todasReceitas.findIndex(r => r.id === id);
+    if (idx !== -1) todasReceitas[idx].foto_url = data.foto_url;
+
+    // Atualiza preview no card
+    const fotoPreview = document.querySelector(`#card-${id} .foto-preview`);
+    fotoPreview.innerHTML = `
+      <img src="${data.foto_url}?t=${Date.now()}" alt="Foto">
+      <span class="status-badge status-ok">✓ Com foto</span>`;
+
+    // Atualiza estilo do card
+    document.getElementById(`card-${id}`).classList.add('has-photo');
+
+    // Texto do upload area
+    const uploadText = document.querySelector(`#drop-${id} .upload-text strong`);
+    if (uploadText) uploadText.textContent = 'Substituir foto';
+
+    atualizarStats();
+
+    setTimeout(() => { progressEl.style.display = 'none'; }, 400);
+    successEl.style.display = 'block';
+    setTimeout(() => { successEl.style.display = 'none'; }, 3000);
+
+  } catch (err) {
+    clearInterval(tick);
+    progressEl.style.display = 'none';
+    errorEl.textContent = err.message || 'Erro ao fazer upload. Tente novamente.';
+    errorEl.style.display = 'block';
+    setTimeout(() => { errorEl.style.display = 'none'; }, 5000);
+  }
+}
+
+function mostrarErroGlobal(msg) {
+  const el = document.getElementById('error-global');
+  el.textContent = msg;
+  el.style.display = 'block';
+  document.getElementById('main-content').innerHTML = '';
+}
+
+init();
+</script>
+</body>
+</html>

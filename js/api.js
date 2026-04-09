@@ -88,8 +88,9 @@ async function listarFavoritos()       { return apiFetch('/favoritos'); }
 async function salvarFavorito(id)      { return apiFetch(`/favoritos/${id}`, { method: 'POST' }); }
 async function removerFavorito(id)     { return apiFetch(`/favoritos/${id}`, { method: 'DELETE' }); }
 
-// ── Planos ───────────────────────────────────────────────────
+// ── Planos / Checkout ────────────────────────────────────────
 async function listarPlanos()          { return apiFetch('/planos'); }
+async function criarCheckout(plano)    { return apiFetch('/assinaturas/checkout', { method: 'POST', body: JSON.stringify({ plano }) }); }
 
 // ── Fotos — Unsplash ─────────────────────────────────────────
 async function buscarFotoReceita(nome) {

@@ -10,7 +10,8 @@ from sqlalchemy.orm import Session
 from pydantic import BaseModel, EmailStr
 from datetime import datetime
 from typing import Optional
-import shutil, os, uuid, stripe, json, re, sqlite3, urllib.request, urllib.parse
+import shutil, os, uuid, stripe, json, re, sqlite3, urllib.request, urllib.parse, io
+from PIL import Image
 from dotenv import load_dotenv
 
 from database import engine, get_db, Base
@@ -79,6 +80,14 @@ def login_page():
 def cadastro_page():
     return FileResponse(os.path.join(BASE_DIR, "auth.html"))
 
+@app.get("/admin.html")
+def admin_page():
+    return FileResponse(os.path.join(BASE_DIR, "admin.html"))
+
+@app.get("/planos.html")
+def planos_page():
+    return FileResponse(os.path.join(BASE_DIR, "planos.html"))
+
 # ════════════════════════════════════════════════════════════
 # SCHEMAS (Pydantic)
 # ════════════════════════════════════════════════════════════
@@ -108,6 +117,9 @@ class ReceitaCriar(BaseModel):
 class AssinarInput(BaseModel):
     plano: str       # "mensal" ou "anual"
     token_stripe: str
+
+class CheckoutInput(BaseModel):
+    plano: str       # "mensal" ou "anual"
 
 # ════════════════════════════════════════════════════════════
 # AUTH — Cadastro e Login
@@ -210,6 +222,11 @@ def criar_receita(
     db.refresh(receita)
     return receita
 
+EXTENSOES_PERMITIDAS = {"jpg", "jpeg", "png", "webp"}
+FOTO_MAX_WIDTH = 1200
+FOTO_MAX_HEIGHT = 900
+FOTO_QUALITY = 85
+
 @app.post("/receitas/{id}/foto")
 def upload_foto(
     id: int,
@@ -221,12 +238,28 @@ def upload_foto(
     if not receita:
         raise HTTPException(404, "Receita não encontrada")
 
-    ext      = foto.filename.split(".")[-1]
-    filename = f"{uuid.uuid4()}.{ext}"
-    filepath = os.path.join(FOTOS_DIR, filename)
+    ext = foto.filename.rsplit(".", 1)[-1].lower() if "." in foto.filename else ""
+    if ext not in EXTENSOES_PERMITIDAS:
+        raise HTTPException(400, f"Formato não permitido. Use: {', '.join(EXTENSOES_PERMITIDAS)}")
 
-    with open(filepath, "wb") as f:
-        shutil.copyfileobj(foto.file, f)
+    conteudo = foto.file.read()
+
+    try:
+        img = Image.open(io.BytesIO(conteudo))
+        img = img.convert("RGB")
+        img.thumbnail((FOTO_MAX_WIDTH, FOTO_MAX_HEIGHT), Image.LANCZOS)
+    except Exception:
+        raise HTTPException(400, "Arquivo inválido. Envie uma imagem JPEG, PNG ou WebP.")
+
+    filename = f"{uuid.uuid4()}.jpg"
+    filepath = os.path.join(FOTOS_DIR, filename)
+    img.save(filepath, "JPEG", quality=FOTO_QUALITY, optimize=True)
+
+    # Remove foto antiga se existir
+    if receita.foto_url:
+        antiga = os.path.join(FOTOS_DIR, os.path.basename(receita.foto_url))
+        if os.path.isfile(antiga):
+            os.remove(antiga)
 
     receita.foto_url = f"/fotos/{filename}"
     db.commit()
@@ -336,6 +369,94 @@ def cancelar(usuario = Depends(auth.usuario_atual), db: Session = Depends(get_db
         return {"ok": True}
     except stripe.error.StripeError as e:
         raise HTTPException(400, str(e.user_message))
+
+@app.post("/assinaturas/checkout")
+def criar_checkout(dados: CheckoutInput, usuario = Depends(auth.usuario_atual)):
+    if dados.plano not in PRECOS:
+        raise HTTPException(400, "Plano inválido")
+
+    if not stripe.api_key or stripe.api_key == "coloque_sua_chave_stripe_aqui":
+        raise HTTPException(503, "Pagamentos ainda não configurados. Adicione STRIPE_SECRET_KEY no .env")
+
+    preco = PRECOS[dados.plano]
+    app_url = os.getenv("APP_URL", "http://localhost:8000")
+
+    try:
+        session = stripe.checkout.Session.create(
+            customer_email=usuario.email,
+            payment_method_types=["card"],
+            line_items=[{"price": preco["stripe_price"], "quantity": 1}],
+            mode="subscription",
+            success_url=f"{app_url}/planos.html?sucesso=1&session_id={{CHECKOUT_SESSION_ID}}",
+            cancel_url=f"{app_url}/planos.html?cancelado=1",
+            metadata={"usuario_id": str(usuario.id), "plano": dados.plano},
+        )
+        return {"url": session.url}
+    except stripe.error.StripeError as e:
+        raise HTTPException(400, str(e.user_message))
+
+@app.post("/webhook/stripe")
+async def webhook_stripe(request: Request, db: Session = Depends(get_db)):
+    payload        = await request.body()
+    sig_header     = request.headers.get("stripe-signature", "")
+    webhook_secret = os.getenv("STRIPE_WEBHOOK_SECRET", "")
+
+    try:
+        event = stripe.Webhook.construct_event(payload, sig_header, webhook_secret)
+    except stripe.error.SignatureVerificationError:
+        raise HTTPException(400, "Assinatura inválida")
+    except Exception:
+        raise HTTPException(400, "Payload inválido")
+
+    etype = event["type"]
+
+    if etype == "checkout.session.completed":
+        sess        = event["data"]["object"]
+        usuario_id  = int(sess.get("metadata", {}).get("usuario_id", 0))
+        plano       = sess.get("metadata", {}).get("plano", "")
+        customer_id = sess.get("customer", "")
+        sub_id      = sess.get("subscription", "")
+
+        if not (usuario_id and plano in PRECOS):
+            return {"ok": True}
+
+        usuario_db = db.query(models.Usuario).filter_by(id=usuario_id).first()
+        if not usuario_db:
+            return {"ok": True}
+
+        usuario_db.plano = plano
+        assinatura_db = db.query(models.Assinatura).filter_by(usuario_id=usuario_id).first()
+        preco = PRECOS[plano]
+
+        if assinatura_db:
+            assinatura_db.stripe_sub_id      = sub_id
+            assinatura_db.stripe_customer_id = customer_id
+            assinatura_db.plano              = plano
+            assinatura_db.status             = "ativa"
+            assinatura_db.valor              = preco["valor"]
+        else:
+            db.add(models.Assinatura(
+                usuario_id          = usuario_id,
+                stripe_customer_id  = customer_id,
+                stripe_sub_id       = sub_id,
+                plano               = plano,
+                status              = "ativa",
+                valor               = preco["valor"],
+                inicio              = datetime.utcnow(),
+            ))
+        db.commit()
+
+    elif etype in ("customer.subscription.deleted", "customer.subscription.paused"):
+        sub = event["data"]["object"]
+        assinatura_db = db.query(models.Assinatura).filter_by(stripe_sub_id=sub["id"]).first()
+        if assinatura_db:
+            assinatura_db.status = "cancelada"
+            usuario_db = db.query(models.Usuario).filter_by(id=assinatura_db.usuario_id).first()
+            if usuario_db:
+                usuario_db.plano = "gratuito"
+            db.commit()
+
+    return {"ok": True}
 
 # ════════════════════════════════════════════════════════════
 # PRODUTOS — busca no SQLite
