@@ -893,9 +893,9 @@ function selecionarReceitas(proteinas, dificuldade, restricoes){
     if(filtradas.length >= 3) pool = filtradas;
   }
 
-  // Embaralha e pega 3
+  // Embaralha e pega 5
   pool.sort(() => Math.random() - 0.5);
-  return pool.slice(0, 3);
+  return pool.slice(0, 5);
 }
 
 function introParaTipo(tipo){
@@ -990,7 +990,7 @@ function renderResults(data,tipo){
     ${data._ia ? `<div style="margin-bottom:16px"><span class="ia-generated">✦ Gerado pelo Chef IA</span></div>` : ''}
     <div class="match-note" style="margin-bottom:24px">${data.intro}</div>`;
 
-  const romanos = ['I','II','III'];
+  const romanos = ['I','II','III','IV','V'];
   data.receitas.forEach((r,idx)=>{
     const salva = isSalva(r.nome);
     const dadosJSON = JSON.stringify(r).replace(/"/g,'&quot;');

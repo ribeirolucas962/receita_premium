@@ -545,7 +545,7 @@ def gerar_receita_ia(
     restricoes_str = ", ".join(dados.restricoes) if dados.restricoes else "nenhuma"
     vinhos_str     = ", ".join(dados.vinhos)     if dados.vinhos     else "qualquer vinho"
 
-    prompt = f"""Você é um chef executivo de alta gastronomia. Crie 3 receitas premium sofisticadas.
+    prompt = f"""Você é um chef executivo de alta gastronomia. Crie 5 receitas premium sofisticadas.
 
 Tipo de encontro: {dados.tipo}
 Número de pessoas: {dados.pessoas}
@@ -556,26 +556,33 @@ Restrições alimentares: {restricoes_str}
 Preferências de vinho: {vinhos_str}
 Contexto adicional: {dados.contexto or "nenhum"}
 
-Retorne APENAS um JSON válido (sem markdown, sem texto fora do JSON) com esta estrutura exata:
+Retorne APENAS um JSON válido (sem markdown, sem texto fora do JSON) com esta estrutura exata.
+
+REGRAS OBRIGATÓRIAS para o JSON:
+- Use apenas aspas duplas para delimitar strings
+- Nunca use aspas duplas dentro dos valores — use apóstrofos se precisar
+- Todos os valores de string devem estar em uma única linha sem quebra de linha
+- Seja conciso: máximo 1 frase para campos de texto, máximo 6 itens por lista
+
 {{
-  "intro": "texto introdutório elegante de 2-3 frases",
-  "nota_sommelier": "nota do sommelier sobre os vinhos selecionados",
+  "intro": "texto introdutório elegante em 1 frase",
+  "nota_sommelier": "nota do sommelier em 1 frase",
   "receitas": [
     {{
       "numero": 1,
       "nome": "Nome Elegante da Receita",
-      "foto_busca": "realistic gourmet dish photo search term in english (ex: seared sea bass champagne sauce)",
+      "foto_busca": "realistic gourmet dish photo in english",
       "categoria": "Peixe",
-      "clima": "como esta receita combina com o encontro (1 frase)",
-      "descricao": "descrição sofisticada da receita em 2-3 frases",
+      "clima": "como combina com o encontro em 1 frase",
+      "descricao": "descrição sofisticada em 1 frase",
       "tempo": "XX min",
       "dificuldade": "Alta",
       "porcoes": "2 pessoas",
-      "ingredientes": ["Ingrediente Premium — quantidade"],
-      "tecnica": ["Passo técnico essencial"],
-      "vinhos": ["Vinho Sugerido 1", "Vinho Sugerido 2"],
-      "mesa": [{{"nome": "Item da Mesa", "desc": "Sugestão de apresentação"}}],
-      "dica_chef": "dica técnica exclusiva e surpreendente do chef"
+      "ingredientes": ["Ingrediente — quantidade"],
+      "tecnica": ["Passo essencial"],
+      "vinhos": ["Vinho 1", "Vinho 2"],
+      "mesa": [{{"nome": "Item", "desc": "Sugestão"}}],
+      "dica_chef": "dica exclusiva do chef em 1 frase"
     }}
   ]
 }}"""
@@ -583,25 +590,73 @@ Retorne APENAS um JSON válido (sem markdown, sem texto fora do JSON) com esta e
     try:
         msg = _ai_client.messages.create(
             model="claude-haiku-4-5-20251001",
-            max_tokens=3000,
+            max_tokens=8000,
             messages=[{"role": "user", "content": prompt}]
         )
         texto = msg.content[0].text.strip()
+
         # Remove blocos markdown se presentes
         if "```" in texto:
             m = re.search(r'```(?:json)?\s*([\s\S]*?)```', texto)
             if m:
                 texto = m.group(1).strip()
+
         # Extrai apenas o objeto JSON principal
         inicio = texto.find('{')
-        fim    = texto.rfind('}')
-        if inicio != -1 and fim != -1:
-            texto = texto[inicio:fim+1]
-        # Corrige vírgulas extras antes de } ou ] (erro comum de LLMs)
-        texto = re.sub(r',\s*([}\]])', r'\1', texto)
-        return json.loads(texto)
+        if inicio != -1:
+            texto = texto[inicio:]
+
+        def fix_newlines_in_strings(s):
+            """Substitui quebras de linha literais dentro de strings JSON por espaço."""
+            result = []
+            in_string = False
+            escape_next = False
+            for ch in s:
+                if escape_next:
+                    result.append(ch)
+                    escape_next = False
+                elif ch == '\\' and in_string:
+                    result.append(ch)
+                    escape_next = True
+                elif ch == '"':
+                    in_string = not in_string
+                    result.append(ch)
+                elif in_string and ch in '\n\r':
+                    result.append(' ')
+                else:
+                    result.append(ch)
+            return ''.join(result)
+
+        def tentar_parse(t):
+            # Remove caracteres de controle inválidos em JSON
+            t = re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f]', '', t)
+            # Corrige quebras de linha reais dentro de strings JSON
+            t = fix_newlines_in_strings(t)
+            # Corrige vírgulas extras
+            t = re.sub(r',\s*([}\]])', r'\1', t)
+            return json.loads(t)
+
+        # Tenta parse direto
+        try:
+            return tentar_parse(texto)
+        except json.JSONDecodeError:
+            # JSON pode estar truncado — remove último objeto incompleto e fecha estrutura
+            ultimo_obj = texto.rfind('"numero"')
+            if ultimo_obj != -1:
+                corte = texto.rfind('{', 0, ultimo_obj)
+                if corte != -1:
+                    trecho = texto[corte:]
+                    if trecho.count('{') > trecho.count('}'):
+                        texto = texto[:corte].rstrip().rstrip(',')
+            # Fecha colchetes/chaves abertas
+            texto += ']' * max(0, texto.count('[') - texto.count(']'))
+            texto += '}' * max(0, texto.count('{') - texto.count('}'))
+            return tentar_parse(texto)
+
     except json.JSONDecodeError as e:
-        raise HTTPException(500, f"Erro ao processar resposta da IA. Tente novamente. Detalhe: {str(e)}")
+        pos = e.pos or 0
+        trecho = texto[max(0, pos-80):pos+80]
+        raise HTTPException(500, f"JSON inválido na posição {pos}. Trecho: [{trecho}]. Detalhe: {str(e)}")
     except Exception as e:
         raise HTTPException(500, f"Erro no serviço de IA: {str(e)}")
 
