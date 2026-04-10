@@ -223,6 +223,111 @@ body{
   margin-bottom:24px;line-height:1.65;
 }
 
+/* ── Tabs ── */
+.tabs{display:flex;gap:4px;margin-bottom:32px;border-bottom:1px solid var(--border)}
+.tab-btn{
+  font-size:11px;padding:10px 20px;background:transparent;border:none;
+  color:var(--text3);cursor:pointer;font-family:var(--sans);
+  letter-spacing:.08em;text-transform:uppercase;
+  border-bottom:2px solid transparent;margin-bottom:-1px;
+  transition:all .2s;
+}
+.tab-btn.active{color:var(--gold-light);border-bottom-color:var(--gold)}
+.tab-btn:hover{color:var(--text2)}
+.tab-panel{display:none}.tab-panel.active{display:block}
+
+/* ── Token input ── */
+.token-bar{
+  display:flex;gap:10px;margin-bottom:24px;align-items:center;
+}
+.token-input{
+  flex:1;background:var(--dark2);border:1px solid var(--border);
+  border-radius:10px;padding:9px 14px;color:var(--text);
+  font-family:var(--sans);font-size:13px;outline:none;
+}
+.token-input:focus{border-color:rgba(201,168,76,.4)}
+.btn-load{
+  font-size:11px;padding:9px 18px;border-radius:10px;
+  background:var(--gold-dim);border:1px solid rgba(201,168,76,.3);
+  color:var(--gold-light);cursor:pointer;font-family:var(--sans);
+  letter-spacing:.06em;white-space:nowrap;transition:all .2s;
+}
+.btn-load:hover{background:rgba(201,168,76,.2)}
+
+/* ── Filtros de clientes ── */
+.client-filters{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+
+/* ── Tabela de clientes ── */
+.client-table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:14px}
+.client-table{width:100%;border-collapse:collapse;font-size:13px}
+.client-table th{
+  padding:12px 16px;text-align:left;
+  font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);
+  border-bottom:1px solid var(--border);background:var(--dark2);font-weight:500;
+}
+.client-table td{
+  padding:12px 16px;border-bottom:1px solid var(--border2);
+  vertical-align:middle;
+}
+.client-table tr:last-child td{border-bottom:none}
+.client-table tr:hover td{background:rgba(255,255,255,.02)}
+.badge{
+  font-size:9px;padding:3px 9px;border-radius:20px;font-weight:500;
+  letter-spacing:.06em;text-transform:uppercase;
+}
+.badge-ativo{background:rgba(94,203,161,.12);border:1px solid rgba(94,203,161,.25);color:var(--green)}
+.badge-inativo{background:rgba(232,144,138,.1);border:1px solid rgba(232,144,138,.2);color:var(--red)}
+.badge-mensal{background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.25);color:var(--gold)}
+.badge-anual{background:rgba(94,203,161,.12);border:1px solid rgba(94,203,161,.25);color:var(--green)}
+.badge-gratuito{background:rgba(255,255,255,.05);border:1px solid var(--border2);color:var(--text3)}
+.client-actions{display:flex;gap:6px}
+.btn-action{
+  font-size:10px;padding:5px 11px;border-radius:8px;cursor:pointer;
+  font-family:var(--sans);letter-spacing:.06em;border:1px solid;
+  transition:all .15s;white-space:nowrap;
+}
+.btn-desativar{background:transparent;border-color:rgba(201,168,76,.3);color:var(--gold)}
+.btn-desativar:hover{background:var(--gold-dim)}
+.btn-reativar{background:transparent;border-color:rgba(94,203,161,.3);color:var(--green)}
+.btn-reativar:hover{background:rgba(94,203,161,.08)}
+.btn-excluir{background:transparent;border-color:rgba(232,144,138,.3);color:var(--red)}
+.btn-excluir:hover{background:rgba(232,144,138,.08)}
+.plano-select{
+  font-size:11px;padding:4px 8px;border-radius:8px;
+  background:var(--dark3);border:1px solid var(--border2);
+  color:var(--text2);font-family:var(--sans);cursor:pointer;
+}
+.plano-select:focus{outline:none;border-color:rgba(201,168,76,.4)}
+
+/* ── Modal de confirmação ── */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.7);
+  display:flex;align-items:center;justify-content:center;
+  z-index:1000;backdrop-filter:blur(4px);
+}
+.modal-box{
+  background:var(--dark2);border:1px solid var(--border);
+  border-radius:18px;padding:32px;max-width:420px;width:90%;
+}
+.modal-title{
+  font-family:var(--serif);font-size:22px;color:var(--text);
+  margin-bottom:12px;
+}
+.modal-msg{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:24px}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end}
+.btn-cancel{
+  font-size:11px;padding:9px 18px;border-radius:10px;
+  background:transparent;border:1px solid var(--border2);
+  color:var(--text3);cursor:pointer;font-family:var(--sans);
+}
+.btn-confirm-del{
+  font-size:11px;padding:9px 18px;border-radius:10px;
+  background:rgba(232,144,138,.12);border:1px solid rgba(232,144,138,.3);
+  color:var(--red);cursor:pointer;font-family:var(--sans);
+  letter-spacing:.06em;
+}
+.btn-confirm-del:hover{background:rgba(232,144,138,.2)}
+
 /* ── Responsive ── */
 @media(max-width:600px){
   .stats-bar{grid-template-columns:1fr 1fr}
@@ -237,14 +342,23 @@ body{
   <!-- Header -->
   <div class="page-header">
     <div>
-      <div class="page-title">Gerenciar Fotos</div>
-      <div class="page-subtitle">Painel de administração — Fase 3</div>
+      <div class="page-title">Painel Admin</div>
+      <div class="page-subtitle">Chef IA Premium — Administração</div>
     </div>
     <div class="top-actions">
       <a class="btn-back" href="/">← Voltar ao site</a>
       <button class="logout-btn" onclick="logout()">Sair</button>
     </div>
   </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="mudarAba('fotos', this)">Fotos das Receitas</button>
+    <button class="tab-btn" onclick="mudarAba('clientes', this)">Clientes</button>
+  </div>
+
+  <!-- ═══════════════════ ABA: FOTOS ═══════════════════ -->
+  <div class="tab-panel active" id="aba-fotos">
 
   <!-- Área de erro global -->
   <div id="error-global" style="display:none" class="error-box"></div>
@@ -280,6 +394,46 @@ body{
     <div class="loading-state">
       <div class="loader"></div>
       <div class="loading-text">Carregando receitas...</div>
+    </div>
+  </div>
+
+  </div><!-- fim aba-fotos -->
+
+  <!-- ═══════════════════ ABA: CLIENTES ═══════════════════ -->
+  <div class="tab-panel" id="aba-clientes">
+
+    <!-- Token admin -->
+    <div class="token-bar">
+      <input class="token-input" type="password" id="admin-token"
+        placeholder="Token de admin (ADMIN_TOKEN do .env)"
+        onkeydown="if(event.key==='Enter') carregarClientes()">
+      <button class="btn-load" onclick="carregarClientes()">Carregar clientes</button>
+    </div>
+
+    <div id="error-clientes" style="display:none" class="error-box"></div>
+
+    <!-- Filtros -->
+    <div class="client-filters" id="client-filters" style="display:none">
+      <button class="filter-btn active" onclick="filtrarClientes('todos', this)">Todos</button>
+      <button class="filter-btn" onclick="filtrarClientes('ativos', this)">Ativos</button>
+      <button class="filter-btn" onclick="filtrarClientes('inativos', this)">Inativos</button>
+      <button class="filter-btn" onclick="filtrarClientes('gratuito', this)">Gratuito</button>
+      <button class="filter-btn" onclick="filtrarClientes('mensal', this)">Mensal</button>
+      <button class="filter-btn" onclick="filtrarClientes('anual', this)">Anual</button>
+    </div>
+
+    <div id="client-content"></div>
+  </div><!-- fim aba-clientes -->
+
+  <!-- Modal de confirmação de exclusão -->
+  <div class="modal-overlay" id="modal-excluir" style="display:none" onclick="if(event.target===this)fecharModal()">
+    <div class="modal-box">
+      <div class="modal-title">Excluir cliente?</div>
+      <div class="modal-msg" id="modal-msg">Esta ação é permanente e não pode ser desfeita. Todos os favoritos e dados de assinatura do usuário serão removidos.</div>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="fecharModal()">Cancelar</button>
+        <button class="btn-confirm-del" id="modal-btn-confirmar">Excluir permanentemente</button>
+      </div>
     </div>
   </div>
 
@@ -484,6 +638,234 @@ function mostrarErroGlobal(msg) {
   el.textContent = msg;
   el.style.display = 'block';
   document.getElementById('main-content').innerHTML = '';
+}
+
+// ── Controle de abas ───────────────────────────────────────
+function mudarAba(aba, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('aba-' + aba).classList.add('active');
+}
+
+// ══════════════════════════════════════════════════════════
+// GERENCIAMENTO DE CLIENTES
+// ══════════════════════════════════════════════════════════
+let todosClientes = [];
+
+function getAdminToken() {
+  return document.getElementById('admin-token').value.trim();
+}
+
+function mostrarErroClientes(msg) {
+  const el = document.getElementById('error-clientes');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+function esconderErroClientes() {
+  document.getElementById('error-clientes').style.display = 'none';
+}
+
+async function carregarClientes() {
+  const token = getAdminToken();
+  if (!token) { mostrarErroClientes('Informe o token de admin.'); return; }
+  esconderErroClientes();
+
+  document.getElementById('client-content').innerHTML = `
+    <div class="loading-state">
+      <div class="loader"></div>
+      <div class="loading-text">Carregando clientes...</div>
+    </div>`;
+
+  try {
+    const res = await fetch(`${API_BASE}/admin/usuarios`, {
+      headers: { 'X-Admin-Token': token }
+    });
+    if (!res.ok) {
+      const d = await res.json().catch(() => ({}));
+      throw new Error(d.detail || `Erro ${res.status}`);
+    }
+    todosClientes = await res.json();
+    document.getElementById('client-filters').style.display = 'flex';
+    renderClientes(todosClientes);
+  } catch (err) {
+    document.getElementById('client-content').innerHTML = '';
+    mostrarErroClientes(err.message);
+  }
+}
+
+function filtrarClientes(tipo, btn) {
+  document.querySelectorAll('.client-filters .filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  if (tipo === 'ativos')   renderClientes(todosClientes.filter(u => u.ativo));
+  else if (tipo === 'inativos') renderClientes(todosClientes.filter(u => !u.ativo));
+  else if (tipo === 'gratuito') renderClientes(todosClientes.filter(u => u.plano === 'gratuito'));
+  else if (tipo === 'mensal')   renderClientes(todosClientes.filter(u => u.plano === 'mensal'));
+  else if (tipo === 'anual')    renderClientes(todosClientes.filter(u => u.plano === 'anual'));
+  else renderClientes(todosClientes);
+}
+
+function renderClientes(lista) {
+  const area = document.getElementById('client-content');
+  if (lista.length === 0) {
+    area.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">👤</div>
+        <div class="empty-title">Nenhum cliente encontrado</div>
+        <div class="empty-sub">Tente outro filtro</div>
+      </div>`;
+    return;
+  }
+
+  const rows = lista.map(u => {
+    const data = u.criado_em ? new Date(u.criado_em).toLocaleDateString('pt-BR') : '—';
+    const badgeAtivo = u.ativo
+      ? `<span class="badge badge-ativo">Ativo</span>`
+      : `<span class="badge badge-inativo">Inativo</span>`;
+    const badgePlano = `<span class="badge badge-${u.plano}">${u.plano}</span>`;
+
+    const btnStatus = u.ativo
+      ? `<button class="btn-action btn-desativar" onclick="desativarCliente(${u.id}, '${u.email}')">Desativar</button>`
+      : `<button class="btn-action btn-reativar" onclick="reativarCliente(${u.id}, '${u.email}')">Reativar</button>`;
+
+    return `<tr id="row-${u.id}">
+      <td style="color:var(--text3);font-size:11px">${u.id}</td>
+      <td>${u.nome}</td>
+      <td style="color:var(--text2)">${u.email}</td>
+      <td>
+        <select class="plano-select" onchange="alterarPlano(${u.id}, this)">
+          <option value="gratuito" ${u.plano==='gratuito'?'selected':''}>Gratuito</option>
+          <option value="mensal"   ${u.plano==='mensal'  ?'selected':''}>Mensal</option>
+          <option value="anual"    ${u.plano==='anual'   ?'selected':''}>Anual</option>
+        </select>
+      </td>
+      <td>${badgeAtivo}</td>
+      <td style="color:var(--text3);font-size:11px">${data}</td>
+      <td>
+        <div class="client-actions">
+          ${btnStatus}
+          <button class="btn-action btn-excluir" onclick="confirmarExclusao(${u.id}, '${u.nome}', '${u.email}')">Excluir</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+
+  area.innerHTML = `
+    <div class="client-table-wrap">
+      <table class="client-table">
+        <thead>
+          <tr>
+            <th>ID</th><th>Nome</th><th>E-mail</th><th>Plano</th><th>Status</th><th>Cadastro</th><th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+}
+
+async function alterarPlano(id, selectEl) {
+  const token = getAdminToken();
+  const plano = selectEl.value;
+  const planoAnterior = selectEl.dataset.planoAnterior || selectEl.value;
+  selectEl.disabled = true;
+  esconderErroClientes();
+  try {
+    const res = await fetch(`${API_BASE}/admin/usuarios/${id}/plano`, {
+      method: 'PUT',
+      headers: { 'X-Admin-Token': token, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ plano })
+    });
+    if (!res.ok) throw new Error((await res.json()).detail);
+    const idx = todosClientes.findIndex(u => u.id === id);
+    if (idx !== -1) todosClientes[idx].plano = plano;
+    selectEl.dataset.planoAnterior = plano;
+  } catch (err) {
+    mostrarErroClientes(err.message);
+    selectEl.value = planoAnterior; // reverte visual
+  } finally {
+    selectEl.disabled = false;
+  }
+}
+
+async function desativarCliente(id, email) {
+  const token = getAdminToken();
+  try {
+    const res = await fetch(`${API_BASE}/admin/usuarios/${id}/desativar`, {
+      method: 'PUT',
+      headers: { 'X-Admin-Token': token }
+    });
+    if (!res.ok) throw new Error((await res.json()).detail);
+    const idx = todosClientes.findIndex(u => u.id === id);
+    if (idx !== -1) todosClientes[idx].ativo = false;
+    // Atualiza linha sem re-render completo
+    const row = document.getElementById(`row-${id}`);
+    if (row) {
+      row.cells[4].innerHTML = `<span class="badge badge-inativo">Inativo</span>`;
+      row.cells[6].querySelector('.client-actions').innerHTML =
+        `<button class="btn-action btn-reativar" onclick="reativarCliente(${id}, '${email}')">Reativar</button>
+         <button class="btn-action btn-excluir" onclick="confirmarExclusao(${id}, '', '${email}')">Excluir</button>`;
+    }
+  } catch (err) {
+    mostrarErroClientes(err.message);
+  }
+}
+
+async function reativarCliente(id, email) {
+  const token = getAdminToken();
+  try {
+    const res = await fetch(`${API_BASE}/admin/usuarios/${id}/reativar`, {
+      method: 'PUT',
+      headers: { 'X-Admin-Token': token }
+    });
+    if (!res.ok) throw new Error((await res.json()).detail);
+    const idx = todosClientes.findIndex(u => u.id === id);
+    if (idx !== -1) todosClientes[idx].ativo = true;
+    const row = document.getElementById(`row-${id}`);
+    if (row) {
+      row.cells[4].innerHTML = `<span class="badge badge-ativo">Ativo</span>`;
+      row.cells[6].querySelector('.client-actions').innerHTML =
+        `<button class="btn-action btn-desativar" onclick="desativarCliente(${id}, '${email}')">Desativar</button>
+         <button class="btn-action btn-excluir" onclick="confirmarExclusao(${id}, '', '${email}')">Excluir</button>`;
+    }
+  } catch (err) {
+    mostrarErroClientes(err.message);
+  }
+}
+
+// ── Modal exclusão ─────────────────────────────────────────
+let _excluirId = null;
+
+function confirmarExclusao(id, nome, email) {
+  _excluirId = id;
+  document.getElementById('modal-msg').textContent =
+    `Tem certeza que deseja excluir permanentemente "${nome || email}"? ` +
+    `Esta ação remove todos os favoritos e dados de assinatura e não pode ser desfeita.`;
+  document.getElementById('modal-excluir').style.display = 'flex';
+  document.getElementById('modal-btn-confirmar').onclick = executarExclusao;
+}
+
+function fecharModal() {
+  document.getElementById('modal-excluir').style.display = 'none';
+  _excluirId = null;
+}
+
+async function executarExclusao() {
+  if (!_excluirId) return;
+  const token = getAdminToken();
+  fecharModal();
+  try {
+    const res = await fetch(`${API_BASE}/admin/usuarios/${_excluirId}`, {
+      method: 'DELETE',
+      headers: { 'X-Admin-Token': token }
+    });
+    if (!res.ok) throw new Error((await res.json()).detail);
+    todosClientes = todosClientes.filter(u => u.id !== _excluirId);
+    const row = document.getElementById(`row-${_excluirId}`);
+    if (row) row.remove();
+  } catch (err) {
+    mostrarErroClientes(err.message);
+  }
 }
 
 init();

@@ -10,7 +10,7 @@ from sqlalchemy.orm import Session
 from pydantic import BaseModel, EmailStr
 from datetime import datetime
 from typing import Optional
-import shutil, os, uuid, stripe, json, re, sqlite3, urllib.request, urllib.parse, io
+import shutil, os, uuid, stripe, json, re, sqlite3, urllib.request, urllib.parse, io, hmac, logging
 from PIL import Image
 from dotenv import load_dotenv
 
@@ -18,6 +18,26 @@ from database import engine, get_db, Base
 import models, auth
 
 load_dotenv()
+
+# ── Logger ───────────────────────────────────────────────────
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+)
+logger = logging.getLogger("chef_ia")
+
+# ── Validação do ADMIN_TOKEN na inicialização ─────────────────
+_ADMIN_TOKEN_PLACEHOLDER = "troque_por_um_token_secreto_aqui"
+_ADMIN_TOKEN = os.getenv("ADMIN_TOKEN", "")
+if not _ADMIN_TOKEN or _ADMIN_TOKEN == _ADMIN_TOKEN_PLACEHOLDER:
+    logger.critical(
+        "ADMIN_TOKEN não configurado ou ainda é o valor padrão. "
+        "Os endpoints /admin/* estarão BLOQUEADOS até você definir um token seguro no .env"
+    )
+elif len(_ADMIN_TOKEN) < 32:
+    logger.warning(
+        "ADMIN_TOKEN tem menos de 32 caracteres. Use um token mais longo para maior segurança."
+    )
 
 # ── Claude AI ────────────────────────────────────────────────
 try:
@@ -482,10 +502,131 @@ def buscar_produtos(request: Request, q: str, limite: int = 20):
     return {"total": len(resultados), "produtos": resultados}
 
 # ════════════════════════════════════════════════════════════
+# ADMIN — Gerenciamento de Clientes
+# ════════════════════════════════════════════════════════════
+def verificar_admin(request: Request):
+    """
+    Valida o ADMIN_TOKEN enviado no header X-Admin-Token.
+    - Usa hmac.compare_digest para evitar timing attacks.
+    - Loga tentativas inválidas com o IP do solicitante.
+    - Bloqueia se o token não estiver configurado corretamente.
+    """
+    if not _ADMIN_TOKEN or _ADMIN_TOKEN == _ADMIN_TOKEN_PLACEHOLDER:
+        raise HTTPException(status_code=503, detail="Painel admin não configurado.")
+
+    token_recebido = request.headers.get("X-Admin-Token", "")
+    ip = get_remote_address(request)
+
+    # compare_digest previne timing attack (não revela posição do caractere errado)
+    token_valido = hmac.compare_digest(
+        token_recebido.encode("utf-8"),
+        _ADMIN_TOKEN.encode("utf-8"),
+    )
+    if not token_valido:
+        logger.warning("Tentativa de acesso admin negada — IP: %s", ip)
+        raise HTTPException(status_code=403, detail="Acesso negado.")
+
+@app.get("/admin/usuarios")
+@limiter.limit("20/minute")
+def listar_usuarios(
+    request: Request,
+    plano: Optional[str] = None,
+    ativo: Optional[bool] = None,
+    db: Session = Depends(get_db)
+):
+    verificar_admin(request)
+    query = db.query(models.Usuario)
+    if plano:
+        query = query.filter(models.Usuario.plano == plano)
+    if ativo is not None:
+        query = query.filter(models.Usuario.ativo == ativo)
+    usuarios = query.order_by(models.Usuario.criado_em.desc()).all()
+    return [
+        {
+            "id":        u.id,
+            "nome":      u.nome,
+            "email":     u.email,
+            "plano":     u.plano,
+            "ativo":     u.ativo,
+            "criado_em": u.criado_em,
+        }
+        for u in usuarios
+    ]
+
+@app.put("/admin/usuarios/{id}/desativar")
+@limiter.limit("20/minute")
+def desativar_usuario(id: int, request: Request, db: Session = Depends(get_db)):
+    verificar_admin(request)
+    usuario = db.query(models.Usuario).filter(models.Usuario.id == id).first()
+    if not usuario:
+        raise HTTPException(404, "Usuário não encontrado")
+    usuario.ativo = False
+    db.commit()
+    logger.info("Admin: usuário %s (id=%d) desativado — IP: %s", usuario.email, id, get_remote_address(request))
+    return {"ok": True, "mensagem": f"Usuário {usuario.email} desativado."}
+
+@app.put("/admin/usuarios/{id}/reativar")
+@limiter.limit("20/minute")
+def reativar_usuario(id: int, request: Request, db: Session = Depends(get_db)):
+    verificar_admin(request)
+    usuario = db.query(models.Usuario).filter(models.Usuario.id == id).first()
+    if not usuario:
+        raise HTTPException(404, "Usuário não encontrado")
+    usuario.ativo = True
+    db.commit()
+    logger.info("Admin: usuário %s (id=%d) reativado — IP: %s", usuario.email, id, get_remote_address(request))
+    return {"ok": True, "mensagem": f"Usuário {usuario.email} reativado."}
+
+class AlterarPlanoInput(BaseModel):
+    plano: str  # "gratuito", "mensal" ou "anual"
+
+@app.put("/admin/usuarios/{id}/plano")
+@limiter.limit("20/minute")
+def alterar_plano(id: int, dados: AlterarPlanoInput, request: Request, db: Session = Depends(get_db)):
+    verificar_admin(request)
+    planos_validos = [p.value for p in models.PlanoEnum]
+    if dados.plano not in planos_validos:
+        raise HTTPException(400, f"Plano inválido. Use: {', '.join(planos_validos)}")
+    usuario = db.query(models.Usuario).filter(models.Usuario.id == id).first()
+    if not usuario:
+        raise HTTPException(404, "Usuário não encontrado")
+    plano_anterior = usuario.plano
+    usuario.plano = dados.plano
+    # Sincroniza a assinatura se existir
+    assinatura = db.query(models.Assinatura).filter_by(usuario_id=id).first()
+    if assinatura:
+        assinatura.plano = dados.plano
+        if dados.plano == "gratuito":
+            assinatura.status = "cancelada"
+    db.commit()
+    logger.info(
+        "Admin: plano de %s alterado %s → %s — IP: %s",
+        usuario.email, plano_anterior, dados.plano, get_remote_address(request)
+    )
+    return {"ok": True, "mensagem": f"Plano de {usuario.email} alterado para {dados.plano}."}
+
+@app.delete("/admin/usuarios/{id}")
+@limiter.limit("10/minute")
+def excluir_usuario(id: int, request: Request, db: Session = Depends(get_db)):
+    verificar_admin(request)
+    usuario = db.query(models.Usuario).filter(models.Usuario.id == id).first()
+    if not usuario:
+        raise HTTPException(404, "Usuário não encontrado")
+    email = usuario.email
+    db.query(models.Favorito).filter(models.Favorito.usuario_id == id).delete()
+    db.query(models.Assinatura).filter(models.Assinatura.usuario_id == id).delete()
+    db.delete(usuario)
+    db.commit()
+    logger.info("Admin: usuário %s (id=%d) EXCLUÍDO — IP: %s", email, id, get_remote_address(request))
+    return {"ok": True, "mensagem": f"Usuário {email} excluído permanentemente."}
+
+# ════════════════════════════════════════════════════════════
 # IMPORTAR RECEITAS DO JSON EXISTENTE
 # ════════════════════════════════════════════════════════════
 @app.post("/admin/importar-json")
-def importar_json(db: Session = Depends(get_db)):
+@limiter.limit("5/minute")
+def importar_json(request: Request, db: Session = Depends(get_db)):
+    verificar_admin(request)
     json_path = os.path.join(BASE_DIR, "receitas_premium.json")
     with open(json_path, encoding="utf-8") as f:
         dados = json.load(f)
